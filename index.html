@@ -1,1670 +1,242 @@
 <!DOCTYPE html>
 <html lang="pt-BR" data-theme="light">
 <head>
-    <meta charset="UTF-8"/>    
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>IMOBI | Plataforma Imobiliária Premium</title>   
-
-    <script type="application/ld+json" id="seo-schema">
-    {
-        "@context": "https://schema.org/",
-        "@type": "RealEstateListing",
-        "name": "Plataforma Imobiliária IMOBI",
-        "description": "Gestão de Ágios e Imóveis de Alta Performance"
-    }
-    </script>
-
-    <style>
-        /* RESET ABSOLUTO E UNIFICAÇÃO CROSS-BROWSER */
-        * { 
-            margin: 0; padding: 0; 
-            box-sizing: border-box !important;
-            -webkit-tap-highlight-color: transparent; 
-        }
-        html, body { 
-            width: 100%;
-            height: 100%; 
-            overflow-x: hidden; 
-            position: relative;
-            -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;
-            text-rendering: optimizeLegibility; scroll-behavior: smooth;
-        }
-        body { -webkit-overflow-scrolling: touch; }
-
-        /* OTIMIZAÇÃO DE PERFORMANCE (Engine dos Gigantes) */
-        img, video, iframe { content-visibility: auto; contain-intrinsic-size: 300px; max-width: 100%; }
-
-        :root {
-            --bg-base: #f4f6fa;
-            --bg-surface: #ffffff;
-            --bg-card: #ffffff;
-            --bg-input: #f8fafc;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --border-glow: rgba(26, 115, 232, 0.1);
-            --tesla-red: #e82127;
-            --google-blue: #1a73e8;
-            --google-green: #0f9d58;
-            --google-yellow: #f4b400;
-            --primary-cyber: #00f0ff;
-            --premium-gold: #b45309;
-            --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
-        }
-
-        html[data-theme="dark"] {
-            --bg-base: #060913;
-            --bg-surface: #0c1220; --bg-card: #121b2d;
-            --bg-input: #18253f; --text-main: #f5f7fa; --text-muted: #8a99ad;
-            --border-glow: rgba(0, 240, 255, 0.15); --premium-gold: #ffd700;
-        }
-
-        body { 
-            background-color: var(--bg-base);
-            color: var(--text-main); font-family: var(--font);
-            transition: background-color 0.3s, color 0.3s; min-height: 100vh;
-        }
-
-        /* GLASSMORPHISM */
-        .glass-glow-1 { position: fixed; width: 500px; height: 500px; background: radial-gradient(circle, rgba(26, 115, 232, 0.08) 0%, rgba(232, 33, 39, 0.03) 50%, transparent 100%); top: -10%; right: -10%; z-index: -1; pointer-events: none; }
-        .glass-glow-2 { position: fixed; width: 600px; height: 600px; background: radial-gradient(circle, rgba(15, 157, 88, 0.06) 0%, rgba(244, 180, 0, 0.03) 60%, transparent 100%); bottom: -20%; left: -10%; z-index: -1; pointer-events: none; }
-
-        header.main-header { 
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(128, 128, 128, 0.1); position: sticky; top: 0; z-index: 1000;
-            padding: 1.2rem 2.5rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
-        }
-        html[data-theme="dark"] header.main-header { background: rgba(12, 18, 32, 0.85); }
-
-        .brand { display: flex; align-items: center; gap: 12px; cursor: pointer; }
-        .brand-logo { font-size: 1.8rem; font-weight: 900; letter-spacing: -1px; background: linear-gradient(135deg, var(--text-main) 20%, var(--google-blue) 70%, var(--tesla-red)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .brand-sub { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; display: block; }
-        
-        .nav-link { background: transparent; border: none; color: var(--text-muted); font-size: 0.95rem; font-weight: 600; cursor: pointer; padding: 0.6rem 1.2rem; border-radius: 8px; transition: all 0.25s ease; }
-        .nav-link:hover, .nav-link.active { color: var(--text-main); background: rgba(128, 128, 128, 0.1); }
-        
-        .btn-action { background: linear-gradient(135deg, var(--google-blue) 0%, #0c56be 100%); color: white; font-weight: 700; border: none; padding: 0.7rem 1.5rem; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 15px rgba(26, 115, 232, 0.2); transition: transform 0.2s, box-shadow 0.2s; }
-        .btn-action:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(26, 115, 232, 0.35); }
-        .btn-theme-toggle { background: var(--bg-input); border: 1px solid rgba(128, 128, 128, 0.2); color: var(--text-main); padding: 0.6rem; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
-        
-        .pricing-badge { background: linear-gradient(90deg, rgba(244, 180, 0, 0.1) 0%, rgba(26, 115, 232, 0.08) 100%); border: 1px solid rgba(244, 180, 0, 0.4); color: var(--premium-gold); padding: 0.4rem 1rem; border-radius: 30px; font-size: 0.8rem; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; }
-
-        .container { max-width: 1400px; margin: 2.5rem auto; padding: 0 2rem; }
-        .view-section { display: none; }
-        .view-section.active-view { display: block; }
-        
-        .billing-warning-banner { background: linear-gradient(90deg, var(--tesla-red) 0%, #ba181b 100%); color: white; padding: 1rem 1.5rem; border-radius: 10px; margin-bottom: 1.5rem; display: none; font-weight: 600; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(232, 33, 39, 0.2); }
-
-        /* HERO & HUB DE BUSCA */
-        .hero { text-align: center; padding: 2rem 1rem 2.5rem 1rem; }
-        .hero h1 { font-size: 3.5rem; font-weight: 900; letter-spacing: -1px; line-height: 1.15; margin-bottom: 1.5rem; }
-        .hero h1 span { background: linear-gradient(90deg, var(--google-blue), var(--google-green)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-        .search-hub { background: var(--bg-surface); border: 1px solid rgba(128, 128, 128, 0.15); padding: 1.8rem; border-radius: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) auto auto; gap: 1.2rem; align-items: flex-end; box-shadow: 0 10px 30px rgba(0,0,0,0.03); margin-bottom: 4rem; }
-        .input-group { display: flex; flex-direction: column; gap: 0.6rem; }
-        .input-group label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
-        .input-group input, .input-group select, .input-group textarea { background: var(--bg-input); border: 1px solid rgba(128, 128, 128, 0.2); color: var(--text-main); padding: 0.9rem; border-radius: 10px; outline: none; font-size: 1rem; transition: all 0.3s; }
-        .input-group input:focus, .input-group select:focus { border-color: var(--google-blue); background: var(--bg-surface); box-shadow: 0 0 10px rgba(26, 115, 232, 0.15); }
-
-        .grid-wrapper { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 2.5rem; width: 100%; }
-        
-        /* CARD PREMIUM E LABELS */
-        .card { background: var(--bg-surface); border: 1px solid rgba(128, 128, 128, 0.15); border-radius: 16px; overflow: hidden; position: relative; display: flex; flex-direction: column; box-shadow: 0 10px 25px rgba(0,0,0,0.02); transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
-        .card:hover { transform: translateY(-8px); border-color: var(--google-blue); box-shadow: 0 20px 40px rgba(26, 115, 232, 0.1); }
-        .card-badge { position: absolute; top: 20px; left: 20px; background: rgba(255, 255, 255, 0.95); border: 1px solid var(--google-blue); color: var(--google-blue); padding: 0.4rem 0.9rem; border-radius: 30px; font-size: 0.75rem; font-weight: 800; z-index: 10; text-transform: uppercase; }
-        .card-media-mock { height: 240px; background-color: #e2e8f0; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-        .video-indicator { position: absolute; bottom: 15px; right: 15px; background: var(--tesla-red); color: white; padding: 0.3rem 0.7rem; border-radius: 6px; font-size: 0.7rem; font-weight: 700; display: flex; align-items: center; gap: 4px; z-index: 12; cursor: pointer; }
-        .card-body { padding: 2rem; display: flex; flex-direction: column; flex-grow: 1; }
-        .card-price { font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin: 1rem 0; }
-
-        /* ESTILOS DE AUTENTICAÇÃO */
-        .auth-container { max-width: 500px; margin: 4rem auto; background: var(--bg-surface); border: 1px solid rgba(128, 128, 128, 0.15); border-radius: 20px; padding: 3rem; box-shadow: 0 25px 50px rgba(0,0,0,0.03); }
-        .auth-tabs { display: flex; gap: 1rem; border-bottom: 2px solid var(--bg-input); margin-bottom: 2rem; }
-        .auth-tab { padding: 0.8rem 1.5rem; cursor: pointer; color: var(--text-muted); font-weight: 700; transition: all 0.2s; }
-        .auth-tab.active { color: var(--google-blue); border-bottom: 2px solid var(--google-blue); }
-
-        /* =======================================================
-           NOVA ARQUITETURA SAAS: DASHBOARD SPLIT-SCREEN
-           ======================================================= */
-        .saas-dashboard-wrapper {
-            display: flex;
-            width: 100%;
-            min-height: calc(100vh - 80px);
-            position: relative;
-        }
-
-        /* Sidebar Esquerda Fixa */
-        .saas-sidebar {
-            width: 280px;
-            background-color: var(--bg-surface);
-            border-right: 1px solid rgba(128, 128, 128, 0.15);
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            flex-shrink: 0;
-            position: sticky;
-            top: 80px;
-            height: calc(100vh - 80px);
-            overflow-y: auto;
-        }
-
-        .dash-menu-item { display: flex; align-items: center; gap: 12px; padding: 0.9rem 1.2rem; border-radius: 10px; cursor: pointer; color: var(--text-muted); font-weight: 600; margin-bottom: 0.5rem; transition: all 0.2s; }
-        .dash-menu-item.active, .dash-menu-item:hover { background: var(--bg-input); color: var(--text-main); }
-        .dash-menu-item.active { border-left: 4px solid var(--tesla-red); color: var(--google-blue); }
-
-        /* Área Direita Dinâmica e Rolável */
-        .saas-main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            background-color: var(--bg-base);
-            min-width: 0;
-        }
-
-        /* Painel Master Topo Direito Fixo */
-        .saas-top-metrics {
-            position: sticky;
-            top: 80px;
-            background: var(--bg-surface);
-            border-bottom: 1px solid rgba(128, 128, 128, 0.15);
-            padding: 15px 30px;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            z-index: 900;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
-        }
-
-        .saas-tab-area {
-            padding: 30px;
-            flex: 1;
-        }
-
-        /* Controle de Abas Internas do Dashboard */
-        .app-tab-panel { display: none; }
-        .app-tab-panel.active-view { display: block; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* ESTILOS CRM (BOTÕES DE AÇÃO LEADS) */
-        .crm-actions { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
-        .btn-crm-schedule { background-color: var(--google-blue); color: #fff; border: none; padding: 8px 14px; border-radius: 6px; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: opacity 0.2s; }
-        .btn-crm-delete { background-color: var(--tesla-red); color: #fff; border: none; padding: 8px 14px; border-radius: 6px; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: opacity 0.2s; }
-        .btn-crm-schedule:hover, .btn-crm-delete:hover { opacity: 0.85; }
-
-        /* MODAIS E EFEITOS */
-        .modal-blur { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 5000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; padding: 1rem; }
-        .modal-blur.active { opacity: 1; pointer-events: auto; }
-        .modal-window { background: var(--bg-surface); border: 1px solid rgba(128, 128, 128, 0.2); border-radius: 24px; width: 100%; max-width: 750px; padding: 2.5rem; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 30px 60px rgba(0,0,0,0.2); }
-        
-        #media-viewer-box { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 12px; margin: 1.5rem 0; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-
-        /* TABELAS ADAPTATIVAS */
-        table { width: 100%; border-collapse: collapse; margin-top: 1.5rem; }
-        th { background: var(--bg-input); padding: 1rem; color: var(--text-muted); text-transform: uppercase; font-size: 0.75rem; font-weight: 700; text-align: left; border-radius: 4px; }
-        td { padding: 1.2rem 1rem; border-bottom: 1px solid rgba(128, 128, 128, 0.15); font-size: 0.9rem; }
-
-        /* ADAPTABILIDADE MOBILE RÍGIDA E DEFINITIVA */
-        @media screen and (max-width: 900px) {
-            .saas-dashboard-wrapper { flex-direction: column; }
-            .saas-sidebar { width: 100%; height: auto; position: relative; top: 0; border-right: none; border-bottom: 1px solid rgba(128,128,128,0.15); }
-            .saas-top-metrics { position: relative; top: 0; justify-content: center; padding: 15px; }
-        }
-
-        @media screen and (max-width: 768px) {
-            header.main-header { flex-direction: column; gap: 1rem; padding: 1rem; text-align: center; }
-            nav { width: 100%; justify-content: center; flex-wrap: wrap; gap: 0.5rem; }
-            .hero h1 { font-size: 2.2rem; }
-            .search-hub { grid-template-columns: 1fr !important; padding: 1.2rem; gap: 1rem; }
-            .grid-wrapper { grid-template-columns: 1fr !important; gap: 1.5rem; }
-            .auth-container, .modal-window { padding: 1.5rem; }
-            
-            table, thead, tbody, th, td, tr { display: block; width: 100%; }
-            thead { display: none; }
-            tr { margin-bottom: 1.5rem; background: var(--bg-surface); border: 1px solid rgba(128,128,128,0.2); border-radius: 12px; padding: 1rem; }
-            td { text-align: right; padding-left: 50%; position: relative; border-bottom: 1px solid rgba(128,128,128,0.1); }
-            td:last-child { border-bottom: none; }
-            td::before { content: attr(data-label); position: absolute; left: 1rem; top: 1.2rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; font-size: 0.75rem; }
-        }
-    </style>
-
-    <!-- POLISH ADITIVO: responsividade universal + refino de formulários (não altera o código original acima) -->
-    <style>
-      /* Permitir zoom acessível apesar do maximum-scale do viewport original */
-      @media (max-width: 900px) {
-        html { -webkit-text-size-adjust: 100%; }
-      }
-
-      /* Container fluido em telas médias/pequenas */
-      @media (max-width: 1200px) {
-        .container { padding: 0 1.25rem; margin: 1.75rem auto; }
-      }
-
-      /* HEADER responsivo */
-      @media (max-width: 900px) {
-        header.main-header {
-          padding: 0.85rem 1rem;
-          gap: 0.75rem;
-          flex-wrap: wrap;
-        }
-        header.main-header > * { min-width: 0; }
-        .brand-logo { font-size: 1.35rem; }
-        .brand-sub { font-size: 0.6rem; letter-spacing: 1.5px; }
-        .nav-link { padding: 0.5rem 0.8rem; font-size: 0.85rem; }
-        .btn-action { padding: 0.6rem 1rem; font-size: 0.9rem; }
-      }
-      @media (max-width: 600px) {
-        header.main-header { padding: 0.75rem 0.85rem; }
-        header.main-header nav { order: 3; width: 100%; overflow-x: auto; display: flex; gap: 0.25rem; padding-bottom: 4px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
-        header.main-header nav::-webkit-scrollbar { display: none; }
-        .nav-link { flex: 0 0 auto; white-space: nowrap; }
-      }
-
-      /* HERO fluido */
-      .hero h1 { font-size: clamp(1.9rem, 5.5vw, 3.5rem) !important; }
-      .hero p { font-size: clamp(0.95rem, 2vw, 1.15rem); }
-      @media (max-width: 600px) {
-        .hero { padding: 1rem 0.5rem 1.5rem; }
-      }
-
-      /* SEARCH HUB - stack em telas pequenas */
-      @media (max-width: 900px) {
-        .search-hub {
-          grid-template-columns: 1fr !important;
-          padding: 1.1rem;
-          gap: 0.9rem;
-          border-radius: 16px;
-          margin-bottom: 2.5rem;
-        }
-        .search-hub button, .search-hub .btn-action { width: 100%; }
-      }
-
-      /* GRID de cards adaptativo */
-      .grid-wrapper { grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)) !important; gap: 1.25rem !important; }
-      @media (min-width: 720px) { .grid-wrapper { gap: 1.75rem !important; } }
-      @media (min-width: 1100px) { .grid-wrapper { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)) !important; gap: 2rem !important; } }
-
-      /* CARDS refinados */
-      .card { border-radius: 18px; box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06); }
-      .card:hover { box-shadow: 0 22px 45px rgba(26, 115, 232, 0.14); }
-      .card-media-mock { height: clamp(180px, 42vw, 240px); background-image: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%); }
-      html[data-theme="dark"] .card-media-mock { background-image: linear-gradient(135deg, #1b2740 0%, #101828 100%); }
-      .card-body { padding: 1.25rem 1.25rem 1.5rem; }
-      @media (min-width: 720px) { .card-body { padding: 1.75rem; } }
-      .card-price { font-size: clamp(1.35rem, 3.2vw, 1.8rem); }
-
-      /* AUTH / FORM container polido */
-      .auth-container {
-        margin: 2.5rem auto !important;
-        padding: 1.75rem !important;
-        border-radius: 18px !important;
-        box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08) !important;
-      }
-      @media (min-width: 720px) {
-        .auth-container { margin: 3.5rem auto !important; padding: 2.75rem !important; border-radius: 22px !important; }
-      }
-      .auth-tabs { gap: 0.5rem; }
-      .auth-tab { flex: 1; text-align: center; padding: 0.85rem 0.5rem; font-size: 0.95rem; border-radius: 10px 10px 0 0; transition: background 0.2s, color 0.2s; }
-      .auth-tab:hover { background: var(--bg-input); }
-
-      /* INPUTS refinados em todo o site */
-      .input-group input,
-      .input-group select,
-      .input-group textarea,
-      .auth-container input,
-      .auth-container select,
-      .auth-container textarea,
-      .modal-window input,
-      .modal-window select,
-      .modal-window textarea {
-        width: 100%;
-        min-height: 48px;
-        border-radius: 12px !important;
-        border: 1.5px solid rgba(128, 128, 128, 0.22) !important;
-        padding: 0.85rem 1rem !important;
-        font-size: 1rem !important;
-        transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
-      }
-      .input-group input:hover,
-      .input-group select:hover,
-      .input-group textarea:hover {
-        border-color: rgba(26, 115, 232, 0.45) !important;
-      }
-      .input-group input:focus,
-      .input-group select:focus,
-      .input-group textarea:focus,
-      .auth-container input:focus,
-      .auth-container select:focus,
-      .modal-window input:focus,
-      .modal-window select:focus,
-      .modal-window textarea:focus {
-        border-color: var(--google-blue) !important;
-        box-shadow: 0 0 0 4px rgba(26, 115, 232, 0.15) !important;
-        background: var(--bg-surface) !important;
-        outline: none;
-      }
-      .input-group label { font-size: 0.72rem; letter-spacing: 1.2px; margin-bottom: 0.35rem; }
-
-      /* Botões primários — área de toque confortável */
-      .btn-action, .btn-crm-schedule, .btn-crm-delete {
-        min-height: 44px;
-        font-size: 0.95rem;
-      }
-      @media (max-width: 600px) {
-        .auth-container .btn-action { width: 100%; }
-      }
-
-      /* DASHBOARD SaaS responsivo */
-      @media (max-width: 1024px) {
-        .saas-dashboard-wrapper { flex-direction: column; }
-        .saas-sidebar {
-          width: 100%;
-          position: relative;
-          top: 0;
-          height: auto;
-          border-right: none;
-          border-bottom: 1px solid rgba(128, 128, 128, 0.15);
-          flex-direction: row;
-          overflow-x: auto;
-          overflow-y: hidden;
-          gap: 0.4rem;
-          padding: 0.75rem 1rem;
-          -webkit-overflow-scrolling: touch;
-        }
-        .saas-sidebar::-webkit-scrollbar { display: none; }
-        .dash-menu-item {
-          flex: 0 0 auto;
-          margin-bottom: 0;
-          padding: 0.7rem 1rem;
-          white-space: nowrap;
-          border-radius: 999px;
-        }
-        .dash-menu-item.active { border-left: none; box-shadow: inset 0 -3px 0 var(--tesla-red); border-radius: 999px 999px 0 0; }
-        .saas-top-metrics { position: relative; top: 0; padding: 0.85rem 1rem; justify-content: flex-start; overflow-x: auto; }
-        .saas-tab-area { padding: 1.1rem; }
-      }
-
-      /* MODAIS responsivos */
-      @media (max-width: 600px) {
-        .modal-blur { padding: 0.5rem; align-items: flex-start; padding-top: 1rem; }
-        .modal-window { padding: 1.25rem !important; border-radius: 18px !important; max-height: 95vh; }
-      }
-
-      /* Imagens e mídia nunca estouram */
-      img, video { max-width: 100%; height: auto; display: block; }
-
-      /* Tabelas com scroll horizontal em telas pequenas */
-      table { width: 100%; }
-      @media (max-width: 720px) {
-        table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-      }
-
-      /* Foco visível para acessibilidade */
-      button:focus-visible, a:focus-visible, [role="button"]:focus-visible {
-        outline: 3px solid rgba(26, 115, 232, 0.55);
-        outline-offset: 2px;
-        border-radius: 8px;
-      }
-
-      /* Redução de movimento */
-      @media (prefers-reduced-motion: reduce) {
-        *, *::before, *::after {
-          animation-duration: 0.001ms !important;
-          transition-duration: 0.001ms !important;
-          scroll-behavior: auto !important;
-        }
-      }
-    </style>
-
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>IMOBI — Sistema de Design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-	@font-face {
-		font-family: 'CameraPlainVariable';
-		src: url('https://cdn.gpteng.co/mcp-widgets/v1/fonts/CameraPlainVariable.woff2') format('woff2');
-		font-weight: 100 900;
-		font-style: normal;
-		font-display: swap;
-	}
+  :root{
+    --concreto:#F1EEE6;
+    --concreto-2:#E7E1D2;
+    --tinta:#14181B;
+    --tinta-suave:#4B5257;
+    --paranoa:#1D4E63;
+    --paranoa-escuro:#123746;
+    --argila:#B8451F;
+    --latao:#9C7A2E;
+    --linha:rgba(20,24,27,.14);
+    --superficie:#FFFFFF;
+    --raio:2px;
+    --display:'Space Grotesk',system-ui,sans-serif;
+    --corpo:'Source Serif 4',Georgia,serif;
+    --dados:'IBM Plex Mono',monospace;
+  }
+  html[data-theme="dark"]{
+    --concreto:#12181C; --concreto-2:#1B2226; --tinta:#F1EEE6; --tinta-suave:#9BA3A8;
+    --superficie:#182025; --linha:rgba(241,238,230,.14);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--concreto);color:var(--tinta);font-family:var(--corpo);transition:background .3s,color .3s;}
+  a{color:inherit;}
 
-	#lovable-badge {
-		--badge-bg: #1b1b1b;
-		--badge-text: #c5c1b9;
-		--badge-text-hover: #dcdad5;
-		--badge-radius: 6px;
-		--badge-padding: 8px;
-		--badge-gap: 6px;
-		--badge-shadow: 
-			0 0 0 1px rgba(0, 0, 0, 0.88),
-			0 1px 0 0 rgba(0, 0, 0, 0.04),
-			0 2px 2px -1px rgba(0, 0, 0, 0.08),
-			0 4px 4px -2px rgba(0, 0, 0, 0.08),
-			0 8px 8px -4px rgba(0, 0, 0, 0.08),
-			0 16px 16px -8px rgba(0, 0, 0, 0.08);
-		--badge-transition-duration: 0.2s;
-		--badge-transition-easing: cubic-bezier(0.16, 1, 0.32, 1);
-		--focus-color: #575ECF;
-		--focus-offset: 2px;
-		--focus-width: 2px;
-		
-		position: fixed;
-		bottom: 12px;
-		right: 12px;
-		height: 24px;
-		display: flex;
-		align-items: center;
-		z-index: 1000000;
-		background-color: var(--badge-bg) !important;
-		color: var(--badge-text) !important;
-		border-radius: var(--badge-radius);
-		box-shadow: var(--badge-shadow) !important;
-		font-size: 12px;
-		font-family: CameraPlainVariable, "CameraPlainVariable Fallback", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-		font-weight: 400 !important;
-		text-transform: none !important;
-		font-feature-settings: normal !important;
-		transform: translateZ(0);
-		will-change: transform, opacity;
-	}
+  /* ===== Cabeçalho ===== */
+  header{display:flex;justify-content:space-between;align-items:center;padding:1.4rem 3rem;border-bottom:1px solid var(--linha);position:sticky;top:0;background:var(--concreto);z-index:50;}
+  .marca{display:flex;align-items:baseline;gap:.6rem;font-family:var(--display);}
+  .marca .nome{font-size:1.5rem;font-weight:700;letter-spacing:-.02em;}
+  .marca .sub{font-family:var(--dados);font-size:.68rem;color:var(--tinta-suave);letter-spacing:.14em;text-transform:uppercase;}
+  nav{display:flex;gap:2.2rem;font-family:var(--display);font-size:.92rem;font-weight:500;}
+  nav a{opacity:.72;padding-bottom:.3rem;border-bottom:1px solid transparent;transition:.2s;}
+  nav a:hover{opacity:1;border-color:var(--paranoa);}
+  .acoes-topo{display:flex;gap:.8rem;align-items:center;}
+  .btn-ghost{background:none;border:1px solid var(--linha);color:var(--tinta);font-family:var(--display);font-size:.85rem;font-weight:500;padding:.6rem 1.1rem;border-radius:var(--raio);cursor:pointer;}
+  .btn-solido{background:var(--paranoa);border:1px solid var(--paranoa);color:#fff;font-family:var(--display);font-size:.85rem;font-weight:600;padding:.62rem 1.2rem;border-radius:var(--raio);cursor:pointer;}
+  .btn-solido:hover{background:var(--paranoa-escuro);}
 
-	#lovable-badge-cta {
-		display: flex;
-		align-items: center;
-		gap: var(--badge-gap);
-		padding: 0 var(--badge-padding);
-		height: 100%;
-		color: inherit;
-		text-decoration: none;
-		white-space: nowrap;
-		border-radius: var(--badge-radius) 0 0 var(--badge-radius);
-		transition: 
-			background-color var(--badge-transition-duration) ease,
-			color var(--badge-transition-duration) ease,
-			transform 0.1s ease;
-	}
+  /* ===== Hero ===== */
+  .hero{position:relative;padding:5.5rem 3rem 3rem;max-width:1400px;margin:0 auto;overflow:hidden;}
+  .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:3rem;align-items:end;}
+  .eyebrow{font-family:var(--dados);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--paranoa);margin-bottom:1.2rem;display:flex;align-items:center;gap:.6rem;}
+  .eyebrow::before{content:"";width:22px;height:1px;background:var(--paranoa);}
+  h1{font-family:var(--display);font-weight:700;font-size:clamp(2.4rem,4.6vw,4.1rem);line-height:1.05;letter-spacing:-.02em;}
+  h1 em{font-style:normal;color:var(--paranoa);}
+  .hero p.lead{font-family:var(--corpo);font-size:1.15rem;color:var(--tinta-suave);max-width:46ch;margin-top:1.4rem;line-height:1.55;}
 
-	#lovable-badge-cta:hover {
-		background: rgba(255, 255, 255, 0.04);
-		color: var(--badge-text-hover);
-	}
+  .arco-svg{width:100%;height:auto;}
+  .arco-svg path{stroke:var(--tinta);opacity:.16;}
+  html[data-theme="dark"] .arco-svg path{opacity:.28;}
 
-	#lovable-badge-cta:active {
-		transform: scale(0.98);
-	}
+  /* ===== Ficha de busca (substitui o "glass search box" genérico) ===== */
+  .ficha{margin-top:3.2rem;border:1px solid var(--linha);background:var(--superficie);border-radius:var(--raio);}
+  .ficha-topo{display:flex;justify-content:space-between;align-items:center;padding:.9rem 1.4rem;border-bottom:1px solid var(--linha);font-family:var(--dados);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--tinta-suave);}
+  .ficha-corpo{display:grid;grid-template-columns:1.1fr 1.6fr auto;gap:0;}
+  .campo{padding:1.2rem 1.4rem;border-right:1px solid var(--linha);}
+  .campo:last-child{border-right:none;display:flex;align-items:center;}
+  .campo label{display:block;font-family:var(--dados);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--tinta-suave);margin-bottom:.5rem;}
+  .campo select,.campo input{width:100%;border:none;background:transparent;font-family:var(--corpo);font-size:1.02rem;color:var(--tinta);outline:none;}
+  .btn-buscar{width:100%;height:100%;background:var(--tinta);color:var(--concreto);border:none;font-family:var(--display);font-weight:600;font-size:.95rem;padding:0 2.2rem;cursor:pointer;letter-spacing:.02em;}
+  .btn-buscar:hover{background:var(--paranoa);}
 
-	#lovable-badge-cta:focus {
-		outline: none;
-	}
+  /* ===== Selo de verificação — elemento de assinatura ===== */
+  .selo{position:absolute;width:74px;height:74px;top:14px;right:14px;z-index:5;}
+  .selo svg{width:100%;height:100%;filter:drop-shadow(0 2px 4px rgba(0,0,0,.25));transition:transform .5s ease;}
+  .card:hover .selo svg{transform:rotate(18deg);}
+  .selo-texto{font-family:var(--dados);font-size:6.4px;letter-spacing:.5px;fill:var(--concreto);}
+  .selo-anel{fill:var(--latao);}
+  .selo-check{stroke:var(--concreto);stroke-width:2;fill:none;}
 
-	#lovable-badge-cta:focus-visible {
-		outline: var(--focus-width) solid var(--focus-color);
-		outline-offset: var(--focus-offset);
-		z-index: 1;
-	}
+  /* ===== Seção de imóveis ===== */
+  .secao{max-width:1400px;margin:5rem auto;padding:0 3rem;}
+  .secao-cabecalho{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--linha);padding-bottom:1.2rem;margin-bottom:2.4rem;}
+  .secao-cabecalho h2{font-family:var(--display);font-size:1.7rem;font-weight:600;}
+  .secao-cabecalho span{font-family:var(--dados);font-size:.75rem;color:var(--tinta-suave);}
 
-	#lovable-badge-text {
-		line-height: 1;
-	}
+  .grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:2.2rem;}
+  .card{background:var(--superficie);border:1px solid var(--linha);border-radius:var(--raio);overflow:hidden;position:relative;transition:transform .3s,box-shadow .3s;}
+  .card:hover{transform:translateY(-4px);box-shadow:0 18px 32px rgba(20,24,27,.09);}
+  .card-foto{height:210px;background:linear-gradient(135deg,var(--concreto-2),var(--concreto));position:relative;}
+  .tab-modalidade{position:absolute;bottom:0;left:20px;background:var(--argila);color:#fff;font-family:var(--dados);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;padding:.4rem .8rem;clip-path:polygon(0 0,100% 0,92% 100%,8% 100%);}
+  .card-corpo{padding:1.5rem 1.6rem 1.7rem;}
+  .card-corpo h3{font-family:var(--display);font-size:1.12rem;font-weight:600;margin-bottom:.35rem;}
+  .card-local{font-family:var(--dados);font-size:.78rem;color:var(--tinta-suave);}
+  .card-rodape{display:flex;justify-content:space-between;align-items:flex-end;margin-top:1.3rem;padding-top:1.1rem;border-top:1px dashed var(--linha);}
+  .card-preco{font-family:var(--dados);font-size:1.32rem;font-weight:500;}
+  .card-preco small{display:block;font-size:.62rem;color:var(--tinta-suave);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.2rem;}
+  .card-corretor{font-family:var(--corpo);font-size:.82rem;font-style:italic;color:var(--tinta-suave);text-align:right;}
 
-	#lovable-badge-divider {
-		width: 1px;
-		height: 24px;
-		background-color: rgba(255, 255, 255, 0.04);
-		flex-shrink: 0;
-	}
+  footer{border-top:1px solid var(--linha);padding:2.4rem 3rem;text-align:center;font-family:var(--dados);font-size:.72rem;color:var(--tinta-suave);letter-spacing:.05em;}
 
-	#lovable-badge-close {
-		width: 24px;
-		height: 24px;
-		min-width: 24px;
-		min-height: 24px;
-		cursor: pointer;
-		background: none;
-		border: none;
-		padding: 0;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		border-radius: 0 var(--badge-radius) var(--badge-radius) 0;
-		flex-shrink: 0;
-		transition: 
-			background-color var(--badge-transition-duration) ease,
-			transform 0.1s ease;
-	}
-
-	#lovable-badge-close:hover {
-		background: rgba(255, 255, 255, 0.04);
-	}
-
-	#lovable-badge-close:active {
-		transform: scale(0.92);
-	}
-
-	#lovable-badge-close:focus {
-		outline: none;
-	}
-
-	#lovable-badge-close:focus-visible {
-		outline: var(--focus-width) solid var(--focus-color);
-		outline-offset: calc(var(--focus-offset) * -1);
-		z-index: 1;
-	}
-
-	#lovable-badge-close svg path {
-		fill: var(--badge-text);
-		transition: fill var(--badge-transition-duration) ease;
-	}
-
-	#lovable-badge-close:hover svg path {
-		fill: var(--badge-text-hover);
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		#lovable-badge-cta,
-		#lovable-badge-close,
-		#lovable-badge-close svg path {
-			transition: none;
-		}
-		
-		#lovable-badge-cta:active,
-		#lovable-badge-close:active {
-			transform: none;
-		}
-	}
-
-	@media (prefers-contrast: high) {
-		#lovable-badge {
-			--badge-bg: #000;
-			--badge-text: #fff;
-			--badge-text-hover: #fff;
-			border: 2px solid currentColor;
-		}
-		
-		#lovable-badge-cta:focus-visible,
-		#lovable-badge-close:focus-visible {
-			outline-width: 3px;
-		}
-	}
+  @media(max-width:900px){
+    .hero-grid{grid-template-columns:1fr;}
+    .ficha-corpo{grid-template-columns:1fr;}
+    .campo{border-right:none;border-bottom:1px solid var(--linha);}
+    header,.hero,.secao{padding-left:1.3rem;padding-right:1.3rem;}
+    nav{display:none;}
+  }
 </style>
-<script defer src="/__l5e/events.js" data-artifact-kind="static_preview" data-artifact-id="5f869a1f4f7320a09d128ff876d65c8f5d0b73aa" data-commit-sha="5f869a1f4f7320a09d128ff876d65c8f5d0b73aa" data-context-token="v1.eyJwcm9qZWN0X2lkIjoiNzc1ZjczOGMtNDM4OC00ZDZmLThmNTMtMjA3ZGU2MjViMmI0IiwiYXJ0aWZhY3Rfa2luZCI6InN0YXRpY19wcmV2aWV3IiwiYXJ0aWZhY3RfaWQiOiI1Zjg2OWExZjRmNzMyMGEwOWQxMjhmZjg3NmQ2NWM4ZjVkMGI3M2FhIiwiY29tbWl0X3NoYSI6IjVmODY5YTFmNGY3MzIwYTA5ZDEyOGZmODc2ZDY1YzhmNWQwYjczYWEiLCJleHAiOjE3ODMwMzk1NDd9.ToCI52rdW3Y1NPUVmQP2EQFsswJot6lZ-THlglls3Rs" data-track-url="/__l5e/trackevents?__lovable_sha=5f869a1f4f7320a09d128ff876d65c8f5d0b73aa"></script><meta property="og:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/2e01b46a-ce83-4207-b67a-9e1081749d91/id-preview-5f869a1f--775f738c-4388-4d6f-8f53-207de625b2b4.lovable.app-1783035758591.png"><meta name="twitter:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/2e01b46a-ce83-4207-b67a-9e1081749d91/id-preview-5f869a1f--775f738c-4388-4d6f-8f53-207de625b2b4.lovable.app-1783035758591.png"></head>
+</head>
 <body>
 
-    <div class="glass-glow-1"></div>
-    <div class="glass-glow-2"></div>
+<header>
+  <div class="marca">
+    <span class="nome">IMOBI</span>
+    <span class="sub">Distrito Federal</span>
+  </div>
+  <nav>
+    <a href="#">Ágio</a>
+    <a href="#">Venda direta</a>
+    <a href="#">Locação</a>
+    <a href="#">Para corretores</a>
+  </nav>
+  <div class="acoes-topo">
+    <button class="btn-ghost">Entrar</button>
+    <button class="btn-solido">Anunciar imóvel</button>
+  </div>
+</header>
 
-    <header class="main-header">
-        <div class="brand" onclick="app.navigate('home')">
-            <div>
-                <span class="brand-logo">IMOBI</span>
-                <span class="brand-sub">Partner Holding</span>
-            </div>
-        </div>
-        <div style="display: flex; align-items: center; gap: 1rem;">
-            <nav id="main-nav-links"></nav>
-            <button class="btn-theme-toggle" onclick="app.toggleTheme()">🌓</button>
-        </div>
-    </header>
-
-    <div class="container" style="padding-top: 0; padding-bottom: 0;">
-        <div class="billing-warning-banner" id="global-billing-alert"></div>
+<section class="hero">
+  <div class="hero-grid">
+    <div>
+      <div class="eyebrow">Plataforma multi-marca de imóveis</div>
+      <h1>A curva que sustenta<br>o seu <em>próximo endereço</em>.</h1>
+      <p class="lead">Cada corretor, imobiliária, construtora e correspondente Caixa aqui tem a própria marca, o próprio domínio e o próprio PIX de recebimento — a vitrine é de todos, o negócio é de cada um.</p>
     </div>
+    <svg class="arco-svg" viewBox="0 0 400 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M10 210 Q10 40 100 40 Q190 40 190 210" stroke-width="1.4"/>
+      <path d="M150 210 Q150 90 220 90 Q290 90 290 210" stroke-width="1.4"/>
+      <path d="M250 210 Q250 130 320 130 Q390 130 390 210" stroke-width="1.4"/>
+    </svg>
+  </div>
 
-    <section id="sec-home" class="view-section active-view container">
-        <div class="hero">
-            <h1>Plataforma <br><span>Inteligente de Imóveis</span></h1>
-            <p style="color: var(--text-muted); max-width: 650px; margin: 1rem auto 0 auto;">
-                Infraestrutura inteligente de compradores no Distrito Federal e Entorno.
-            </p>
-        </div>
-        
-        <div class="search-hub">
-            <div class="input-group">
-                <label>Modalidade</label>
-                <select id="search-type" onchange="app.executeSearch()">
-                    <option value="">Todas as opções</option>
-                    <option value="Ágio">Negociação de Ágio</option>
-                    <option value="Venda">Venda Direta</option>
-                    <option value="Aluguel">Locação Residencial</option>
-                </select>
-            </div>
-            <div class="input-group">
-                <label>Buscar Localização / Palavra-Chave</label>
-                <input type="text" id="search-location-query" placeholder="Ex: Águas Lindas, Sul, Centro..." oninput="app.executeSearch()">
-            </div>
-            <button class="btn-action" style="background: linear-gradient(135deg, var(--google-blue) 0%, #0c56be 100%); height: 50px;" onclick="app.executeSearch()">Buscar</button>
-            <button class="btn-action" style="background: var(--text-main); height: 50px;" onclick="app.clearSearchFilters()">Limpar</button>
-        </div>
-        
-        <div class="grid-wrapper" id="public-properties-grid"></div>
-    </section>
-
-    <section id="sec-auth" class="view-section container">
-        <div class="auth-container">
-            <div class="auth-tabs">
-                <div class="auth-tab active" id="tab-auth-login" onclick="app.switchAuthMode('login')">Entrar</div>
-                <div class="auth-tab" id="tab-auth-register" onclick="app.switchAuthMode('register')">Cadastrar Conta</div>
-            </div>
-            <h3 id="auth-form-title" style="margin-bottom: 1.5rem; color: var(--text-main);">Acessar Plataforma</h3>
-            <form id="form-auth" onsubmit="app.actionAuthSubmit(event)">
-                <div class="input-group" id="register-name-group" style="margin-bottom: 1.2rem; display: none;">
-                    <label>Nome Profissional</label>
-                    <input type="text" id="reg-name" placeholder="Nome Completo">
-                </div>
-                <div class="input-group" id="register-phone-group" style="margin-bottom: 1.2rem; display: none;">
-                    <label>WhatsApp Corporativo (Com DDD)</label>
-                    <input type="text" id="reg-phone" placeholder="Ex: 5561983446343">
-                </div>
-                <div class="input-group" style="margin-bottom: 1.2rem;">
-                    <label>E-mail Corporativo</label>
-                    <input type="email" id="login-email" required placeholder="exemplo@partner.com">
-                </div>
-                <div class="input-group" style="margin-bottom: 2rem;">
-                    <label>Senha de Acesso</label>
-                    <input type="password" id="login-password" required placeholder="Sua senha secreta">
-                </div>
-                <button type="submit" id="auth-submit-btn" class="btn-action" style="width: 100%;">Entrar</button>
-            </form>
-        </div>
-    </section>
-
-    <section id="sec-dashboard" class="view-section">
-        <div class="saas-dashboard-wrapper">
-            
-            <aside class="saas-sidebar">
-                <div style="text-align: center; margin-bottom: 2rem; border-bottom: 1px solid rgba(128,128,128,0.15); padding-bottom: 1.5rem;">
-                    <h3 id="dash-user-name" style="color: var(--text-main); font-size: 1.2rem; margin-bottom: 0.2rem;">Usuário</h3>
-                    <span id="dash-user-role" class="pricing-badge">Nível</span>
-                </div>
-                
-                <nav style="display: flex; flex-direction: column; width: 100%;">
-                    <div class="dash-menu-item active" id="menu-pane-especialista" onclick="app.switchDashTab('pane-especialista')">📊 Painel do Especialista</div>
-                    <div class="dash-menu-item" id="menu-pane-anuncios" onclick="app.switchDashTab('pane-anuncios')">🏢 Meus Anúncios Publicados</div>
-                    <div class="dash-menu-item" id="menu-pane-leads" onclick="app.switchDashTab('pane-leads')">🎯 Leads Convertidos (CRM)</div>
-                    <div class="dash-menu-item" id="menu-pane-auditoria" onclick="app.switchDashTab('pane-auditoria')" style="display: none;">⚖️ Gestão e Auditoria</div>
-                </nav>
-                
-                <button class="btn-action" style="width: 100%; margin-top: auto; padding: 1rem;" onclick="app.openPropertyFormModal()">➕ Novo Anúncio</button>
-            </aside>
-
-            <main class="saas-main-content">
-                
-                <header class="saas-top-metrics">
-                    <div style="text-align: right;">
-                        <span style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: bold; display: block;">Métricas Master da Rede (Tempo Real)</span>
-                        <div style="display: flex; gap: 15px; margin-top: 4px; justify-content: flex-end;">
-                            <div style="background: var(--bg-input); border: 1px solid rgba(128,128,128,0.2); padding: 4px 10px; border-radius: 4px; font-size: 0.85rem; font-weight: bold; color: var(--google-blue);">
-                                Usuários: <span id="master-realtime-users">0</span>
-                            </div>
-                            <div style="background: var(--bg-input); border: 1px solid rgba(128,128,128,0.2); padding: 4px 10px; border-radius: 4px; font-size: 0.85rem; font-weight: bold; color: var(--google-green);">
-                                Imóveis: <span id="master-realtime-ops">0</span>
-                            </div>
-                        </div>
-                    </div>
-                </header>
-
-                <div class="saas-tab-area">
-                    
-                    <div id="pane-especialista" class="app-tab-panel active-view">
-                        <h2 style="color: var(--text-main); margin-bottom: 1.5rem;">Visão Geral e Faturamento</h2>
-                        <div style="background: var(--bg-input); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(128,128,128,0.1);">
-                            <h4 style="margin-bottom: 0.8rem; text-transform: uppercase; font-size: 0.75rem; color: var(--text-muted); letter-spacing: 1px;">Status da Licença & KPIs</h4>
-                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem;">
-                                <span style="font-weight: 700; font-size: 1.1rem;" id="billing-status-lbl">Verificando...</span>
-                            </div>
-                            <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-                                <button class="btn-action" style="background: var(--tesla-red); box-shadow: none;" onclick="app.simulateBillingExpiration()">Forçar Inadimplência (Teste)</button>
-                                <button class="btn-action" style="background: var(--google-green); box-shadow: none;" onclick="app.resetBilling()">Comprar Pacote PIX</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="pane-anuncios" class="app-tab-panel">
-                        <h2 style="color: var(--text-main); margin-bottom: 1.5rem;">Gestão de Inventário</h2>
-                        <div style="overflow-x: auto;">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Imóvel</th>
-                                        <th>Tipo</th>
-                                        <th>Localização</th>
-                                        <th>Preço Face</th>
-                                        <th>Ações</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="broker-properties-tbody"></tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div id="pane-leads" class="app-tab-panel">
-                        <h2 style="color: var(--text-main); margin-bottom: 0.5rem;">Funil de Leads (CRM)</h2>
-                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem;">Controle de conversão e agendamentos.</p>
-                        <div id="crm-leads-container" style="display: grid; grid-template-columns: 1fr; gap: 15px;">
-                            </div>
-                    </div>
-
-                    <div id="pane-auditoria" class="app-tab-panel">
-                        <h2 style="color: var(--google-blue); margin-bottom: 1.5rem;">Auditoria Jurídica Master</h2>
-                        <div style="overflow-x: auto;">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Nome</th>
-                                        <th>E-mail</th>
-                                        <th>Nível</th>
-                                        <th>Entregas (KPI)</th>
-                                        <th>Status</th>
-                                        <th>Ações</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="admin-users-tbody"></tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                </div>
-            </main>
-        </div>
-    </section>
-
-    <div class="modal-blur" id="modal-property-detail">
-        <div class="modal-window">
-            <button class="nav-link" style="float: right; font-weight: bold; font-size: 1.2rem;" onclick="app.closeModal('modal-property-detail')">✕</button>
-            <h2 id="md-title" style="color: var(--text-main); margin-bottom: 0.5rem;">Título</h2>
-            <p id="md-location" style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">📍 Localização</p>
-            
-            <div id="md-agio-container" style="background: var(--bg-input); padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem; border-left: 4px solid var(--premium-gold); display: none;">
-                <h4 style="color: var(--premium-gold); margin-bottom: 1rem; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px;">Métricas Exclusivas de Ágio</h4>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.9rem; color: var(--text-main);">
-                    <div><strong>Ágio Pago:</strong> <span id="md-agio-paid">R$ 0,00</span></div>
-                    <div><strong>Saldo Devedor:</strong> <span id="md-agio-remaining">R$ 0,00</span></div>
-                    <div><strong>Prestação:</strong> <span id="md-agio-installment">R$ 0,00</span></div>
-                    <div><strong>Banco Credor:</strong> <span id="md-agio-bank">-</span></div>
-                </div>
-            </div>
-            
-            <h3 id="md-price" style="color: var(--google-blue); font-size: 2rem; margin-bottom: 1.5rem;">R$ 0,00</h3>
-            <p id="md-description" style="line-height: 1.6; margin-bottom: 1.5rem; color: var(--text-main); white-space: pre-wrap;"></p>
-            
-            <h4 style="margin-bottom: 1rem; color: var(--text-main);">▶ Tour Virtual Integrado</h4>
-            <div id="md-video-container" style="width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-bottom: 2rem;"></div>
-            
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                <button class="btn-action" style="background: var(--google-green);" onclick="app.contactBrokerResponsible()">Falar com Especialista</button>
-                <button class="btn-action" style="background: var(--bg-input); color: var(--text-main); border: 1px solid rgba(128,128,128,0.2); box-shadow: none;" onclick="app.copyConversionLink()">Copiar Link URL</button>
-            </div>
-            <div style="margin-top: 1rem; font-size: 0.75rem; color: var(--text-muted); text-align: center; word-break: break-all;" id="md-share-url"></div>
-        </div>
+  <div class="ficha">
+    <div class="ficha-topo">
+      <span>Ficha de busca</span>
+      <span>Nº 001 / DF-ENTORNO</span>
     </div>
-
-    <div class="modal-blur" id="modal-gate-capture">
-        <div class="modal-window" style="max-width: 460px;">
-            <button class="nav-link" style="float: right; font-weight: bold;" onclick="app.closeModal('modal-gate-capture')">✕</button>
-            <h3 style="margin-bottom: 1rem; color: var(--google-blue);">Desbloquear Atendimento</h3>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">
-                Informe os seus dados para contato direto via WhatsApp com o consultor encarregado.
-            </p>
-            <form onsubmit="app.actionSaveLead(event)">
-                <div class="input-group" style="margin-bottom: 1rem;"><label>Nome Profissional</label><input type="text" id="lead-name" required placeholder="Ex: Maria Silva"></div>
-                <div class="input-group" style="margin-bottom: 1.5rem;"><label>WhatsApp (Com DDD)</label><input type="tel" id="lead-phone" required placeholder="Ex: 61999999999"></div>
-                <button type="submit" class="btn-action" style="width: 100%; background: var(--google-green);">Iniciar Conversa</button>
-            </form>
-        </div>
+    <div class="ficha-corpo">
+      <div class="campo">
+        <label>Modalidade</label>
+        <select>
+          <option>Todas as opções</option>
+          <option>Negociação de Ágio</option>
+          <option>Venda direta</option>
+          <option>Locação residencial</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label>Localização / palavra-chave</label>
+        <input type="text" placeholder="Ex: Águas Claras, apartamento 3 quartos">
+      </div>
+      <div class="campo">
+        <button class="btn-buscar">Buscar imóveis</button>
+      </div>
     </div>
+  </div>
+</section>
 
-    <div class="modal-blur" id="modal-property-form">
-        <div class="modal-window" style="max-width: 800px;">
-            <button class="nav-link" style="float: right; font-weight: bold;" onclick="app.closeModal('modal-property-form')">✕</button>
-            <h3 id="form-prop-title" style="margin-bottom: 1.5rem; color: var(--text-main);">Cadastrar Anúncio</h3>
-            
-            <form onsubmit="app.savePropertyAction(event)">
-                <input type="hidden" id="p-id">
-                
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-bottom: 1.2rem;">
-                    <div class="input-group"><label>Título</label><input type="text" id="p-title" required placeholder="Ex: Ágio de Casa 3 Qts"></div>
-                    <div class="input-group">
-                        <label>Modalidade</label>
-                        <select id="p-type" onchange="app.handleFormTypeChange()">
-                            <option value="Ágio">Negociação de Ágio</option>
-                            <option value="Venda">Venda Direta</option>
-                            <option value="Aluguel">Locação Residencial</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-bottom: 1.2rem;">
-                    <div class="input-group"><label>Preço Face (R$)</label><input type="number" id="p-price" required></div>
-                    <div class="input-group"><label>Localização / Bairro</label><input type="text" id="p-location" required></div>
-                </div>
-                
-                <div id="form-agio-exclusive-fields" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-bottom: 1.2rem; background: var(--bg-input); padding: 1.2rem; border-radius: 12px; border-left: 4px solid var(--premium-gold);">
-                    <div class="input-group"><label>Ágio Pago (R$)</label><input type="number" id="p-agio-paid"></div>
-                    <div class="input-group"><label>Saldo Devedor (R$)</label><input type="number" id="p-agio-remaining"></div>
-                    <div class="input-group"><label>Prestação Mensal (R$)</label><input type="number" id="p-agio-installment"></div>
-                    <div class="input-group"><label>Banco Credor</label><input type="text" id="p-agio-bank"></div>
-                </div>
-                
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-bottom: 1.2rem;">
-                    <div class="input-group">
-                        <label>Fotos (Links por vírgula)</label>
-                        <div style="display: flex; gap: 8px;">
-                            <input type="text" id="p-image" style="flex-grow: 1;">
-                            <button type="button" class="btn-action" onclick="app.openDrivePicker('p-image')" style="background: var(--bg-input); color: var(--google-blue); border: 1px solid rgba(128,128,128,0.2); box-shadow: none; font-size: 0.85rem;">☁️ R2 Links</button>
-                            <button type="button" class="btn-action" onclick="document.getElementById('p-image-file').click()" style="background: var(--bg-surface); color: var(--google-green); border: 1px solid var(--google-green); box-shadow: none; font-size: 0.85rem;">📂 PC</button>
-                            <input type="file" id="p-image-file" multiple accept="image/*" style="display: none;" onchange="app.handleLocalImages(this)">
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <label>Vídeo Tour (Link ou YouTube)</label>
-                        <div style="display: flex; gap: 8px;">
-                            <input type="url" id="p-video">
-                            <button type="button" class="btn-action" onclick="document.getElementById('p-video-file').click()" style="background: var(--bg-surface); color: var(--google-green); border: 1px solid var(--google-green); box-shadow: none; font-size: 0.85rem;">📂 PC</button>
-                            <input type="file" id="p-video-file" accept="video/*" style="display: none;" onchange="app.handleLocalVideo(this)">
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="input-group" style="margin-bottom: 2rem;"><label>Memorial Descritivo</label><textarea id="p-description" rows="4"></textarea></div>
-                <button type="submit" class="btn-action" style="width: 100%; padding: 14px; font-size: 1.1rem;">Publicar Anúncio</button>
-            </form>
+<section class="secao">
+  <div class="secao-cabecalho">
+    <h2>Vitrine da rede</h2>
+    <span>Imóveis de todos os corretores e imobiliárias cadastrados</span>
+  </div>
+
+  <div class="grade">
+
+    <article class="card">
+      <div class="card-foto">
+        <span class="tab-modalidade">Ágio</span>
+        <div class="selo">
+          <svg viewBox="0 0 74 74">
+            <circle class="selo-anel" cx="37" cy="37" r="35"/>
+            <circle cx="37" cy="37" r="27" fill="none" stroke="var(--concreto)" stroke-width="1"/>
+            <path class="selo-check" d="M27 37 L34 44 L48 29"/>
+            <text class="selo-texto"><textPath href="#circulo-texto">• IMÓVEL VERIFICADO • CRECI ATIVO </textPath></text>
+            <path id="circulo-texto" d="M 37 8 A 29 29 0 1 1 36.9 8" fill="none"/>
+          </svg>
         </div>
-    </div>
-
-    <div class="modal-blur" id="modal-drive-picker">
-        <div class="modal-window" style="max-width: 550px;">
-            <button class="nav-link" style="float: right; font-weight: bold;" onclick="app.closeModal('modal-drive-picker')">✕</button>
-            <h3 style="margin-bottom: 1.5rem; color: var(--google-blue);">Repositório Cloud CDN</h3>
-            <div id="drive-files-container" style="max-height: 300px; overflow-y: auto; margin-bottom: 1rem;"></div>
-            <button class="btn-action" style="width: 100%; background: var(--text-main);" onclick="app.closeModal('modal-drive-picker')">Fechar Repositório</button>
+      </div>
+      <div class="card-corpo">
+        <h3>Cobertura 3 quartos — Águas Claras</h3>
+        <div class="card-local">Águas Claras · Área Central</div>
+        <div class="card-rodape">
+          <div class="card-preco"><small>Saldo devedor</small>R$ 312.400</div>
+          <div class="card-corretor">Maria Silva Imóveis</div>
         </div>
-    </div>
+      </div>
+    </article>
 
-    <div class="modal-blur" id="modal-pix-payment">
-        <div class="modal-window" style="max-width: 480px; text-align: center;">
-            <button class="nav-link" style="float: right; font-weight: bold;" onclick="app.closeModal('modal-pix-payment')">✕</button>
-            <h3 style="color: var(--google-blue); margin-bottom: 1rem;">Renovação PIX Copia e Cola</h3>
-            <div style="background: white; padding: 1rem; display: inline-block; border-radius: 12px; border: 1px solid rgba(128,128,128,0.2); margin-bottom: 1rem;">
-                <img id="pix-qr-img" src="" alt="QR Code PIX" style="width: 200px; height: 200px;">
-            </div>
-            <div id="pix-payload-container" style="background: var(--bg-input); padding: 10px; border-radius: 8px; font-size: 0.75rem; color: var(--text-muted); word-break: break-all; text-align: left; max-height: 80px; overflow-y: auto; margin-bottom: 1.5rem; display: none; font-family: monospace;"></div>
-            <button id="pix-copy-btn" class="btn-action" style="width: 100%; background: var(--google-blue); margin-bottom: 0.8rem;">📋 Copiar Código PIX</button>
-            <button class="btn-action" style="width: 100%; background: var(--google-green);" onclick="app.processPixPayment()">✓ Confirmar Pagamento</button>
+    <article class="card">
+      <div class="card-foto">
+        <span class="tab-modalidade" style="background:var(--paranoa);">Venda direta</span>
+      </div>
+      <div class="card-corpo">
+        <h3>Casa térrea com quintal — Vicente Pires</h3>
+        <div class="card-local">Vicente Pires · Setor Norte</div>
+        <div class="card-rodape">
+          <div class="card-preco"><small>Preço face</small>R$ 780.000</div>
+          <div class="card-corretor">Construtora Alicerce</div>
         </div>
-    </div>
+      </div>
+    </article>
 
-    <div class="modal-blur" id="modal-media-viewer">
-        <div class="modal-window" style="max-width: 900px; background: #000; border:none; padding:10px;">
-            <button class="nav-link" style="color: white; float: right; font-size:1.5rem; font-weight: bold;" onclick="app.closeMediaViewer()">✕</button>
-            <div id="media-viewer-box" style="width: 100%; aspect-ratio: 16/9; margin-top: 40px;"></div>
+    <article class="card">
+      <div class="card-foto">
+        <span class="tab-modalidade" style="background:var(--latao);">Locação</span>
+        <div class="selo">
+          <svg viewBox="0 0 74 74">
+            <circle class="selo-anel" cx="37" cy="37" r="35"/>
+            <circle cx="37" cy="37" r="27" fill="none" stroke="var(--concreto)" stroke-width="1"/>
+            <path class="selo-check" d="M27 37 L34 44 L48 29"/>
+          </svg>
         </div>
-    </div>
+      </div>
+      <div class="card-corpo">
+        <h3>Apartamento 2 quartos mobiliado — Sudoeste</h3>
+        <div class="card-local">Sudoeste · Próx. Parque da Cidade</div>
+        <div class="card-rodape">
+          <div class="card-preco"><small>Aluguel / mês</small>R$ 3.200</div>
+          <div class="card-corretor">Correspondente Caixa · J. Andrade</div>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<footer>
+  IMOBI — Plataforma multi-tenant de imóveis do Distrito Federal e Entorno · Sistema de design v1
+</footer>
 
-    <script>
-        class ImobiApp {
-            constructor() {
-                this.CONFIG_PIX = { valorRenovacao: 149.90, limiteEntregas: 3 };
-                this.authMode = 'login';
-                this.currentUser = JSON.parse(localStorage.getItem('iamobi_current_user')) || null;
-                this.selectedPropertyForLead = null;
-                this.activeDriveTargetInputId = null;
-                this.carouselIndices = {};
-
-                // Integração Definitiva: Cloudflare R2 + Imgix
-                this.CLOUD_R2_URL = "https://pub-84193ad5106b49e69df6f4d2a13f04fe.r2.dev/imoveis.json";
-               
-
-                // Memória Master
-                this.users = JSON.parse(localStorage.getItem('iamobi_users')) || [{ name: "Cristian Ribeiro", email: "cristian@partner.com", password: "787", role: "Admin", entregasRealizadas: 0, isBlocked: false }];
-                this.leads = JSON.parse(localStorage.getItem('iamobi_leads')) || [];
-                this.properties = []; 
-                this.allProperties = [];
-
-                if (!localStorage.getItem('iamobi_users')) localStorage.setItem('iamobi_users', JSON.stringify(this.users));
-                
-                this.initCloud();
-            }
-
-            // [MOTOR CLOUD] Carrega os dados direto do seu R2 para TODOS os aparelhos
-            async initCloud() {
-                try {
-                    // O parâmetro 't' impede o cache antigo e puxa a lista nova
-                    const response = await fetch(this.CLOUD_R2_URL + '?t=' + Date.now());
-                    if(response.ok) {
-                        this.allProperties = await response.json();
-                    } else {
-                        // Caso você ainda não tenha subido o JSON no R2
-                        this.allProperties = JSON.parse(localStorage.getItem('iamobi_properties')) || [];
-                    }
-                } catch (e) {
-                    console.warn("Lendo localmente. Para aparecer para todos, suba o imoveis.json no painel do Cloudflare R2.");
-                    this.allProperties = JSON.parse(localStorage.getItem('iamobi_properties')) || [];
-                }
-                
-                this.properties = this.allProperties;
-                this.executeInitPipeline();
-            }
-
-            // [MOTOR CDN] Otimiza os links do Cloudflare com o Imgix para não pesar
-            getOptimizedImage(url) {
-                if (!url) return '';
-                if (url.includes('r2.dev')) {
-                    const path = url.split('r2.dev/')[1];
-                    return `${this.IMGIX_DOMAIN}/${path}?auto=format,compress&w=600&q=80`;
-                }
-                return url; // Retorna normal se já for do drive ou imgix
-            }
-
-            executeInitPipeline() {
-                this.applySavedTheme();
-                this.refreshAllScreens();
-                this.catchUrlDeepLink();
-            }
-
-            // Salva dados e gera o JSON automático para você subir no R2
-            saveState() {
-                localStorage.setItem('iamobi_current_user', JSON.stringify(this.currentUser));
-                localStorage.setItem('iamobi_users', JSON.stringify(this.users));
-                localStorage.setItem('iamobi_properties', JSON.stringify(this.properties));
-                localStorage.setItem('iamobi_leads', JSON.stringify(this.leads));
-                this.refreshAllScreens();
-            }
-
-            // Gera o arquivo imoveis.json para o Cloudflare
-            downloadCloudflareDatabase() {
-                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.properties, null, 2));
-                const dlAnchorElem = document.createElement('a');
-                dlAnchorElem.setAttribute("href", dataStr);
-                dlAnchorElem.setAttribute("download", "imoveis.json");
-                dlAnchorElem.click();
-            }
-
-            refreshAllScreens() {
-                this.updateAuthHeader();
-                this.renderPublicGrid();
-                if (this.currentUser) {
-                    this.checkBillingStatusUI();
-                    this.renderDashboard();
-                }
-                document.getElementById('master-realtime-users').innerText = this.users.length;
-                document.getElementById('master-realtime-ops').innerText = this.properties.length;
-            }
-
-            /* --- NAVEGAÇÃO E AUTENTICAÇÃO --- */
-            updateAuthHeader() {
-                const nav = document.getElementById('main-nav-links');
-                if (!nav) return;
-                if (this.currentUser) {
-                    nav.innerHTML = `
-                        <button class="nav-link" onclick="app.navigate('home')">Início</button>
-                        <button class="nav-link" onclick="app.navigate('dashboard')">Dashboard CRM</button>
-                        <span class="pricing-badge">👤 ${this.currentUser.name}</span>
-                        <button class="btn-action" style="background: var(--tesla-red); padding: 0.5rem 1rem;" onclick="app.actionLogout()">Sair</button>
-                    `;
-                } else {
-                    nav.innerHTML = `
-                        <button class="nav-link" onclick="app.navigate('home')">Início</button>
-                        <button class="btn-action" onclick="app.navigate('auth')">Acesso Corretor</button>
-                    `;
-                }
-            }
-
-            navigate(view) {
-                document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active-view'));
-                const section = document.getElementById(`sec-${view}`);
-                if (section) section.classList.add('active-view');
-                if (view === 'dashboard' && !this.currentUser) return this.navigate('auth');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-
-            switchAuthMode(mode) {
-                this.authMode = mode;
-                document.getElementById('tab-auth-login').classList.remove('active');
-                document.getElementById('tab-auth-register').classList.remove('active');
-                if (mode === 'login') {
-                    document.getElementById('tab-auth-login').classList.add('active');
-                    document.getElementById('auth-form-title').innerText = "Acessar Plataforma";
-                    document.getElementById('register-name-group').style.display = 'none';
-                    document.getElementById('register-phone-group').style.display = 'none';
-                    document.getElementById('auth-submit-btn').innerText = "Entrar";
-                } else {
-                    document.getElementById('tab-auth-register').classList.add('active');
-                    document.getElementById('auth-form-title').innerText = "Criar Conta Corporativa";
-                    document.getElementById('register-name-group').style.display = 'flex';
-                    document.getElementById('register-phone-group').style.display = 'flex';
-                    document.getElementById('auth-submit-btn').innerText = "Cadastrar Conta";
-                }
-            }
-
-            actionAuthSubmit(event) {
-                event.preventDefault();
-                const email = document.getElementById('login-email').value.trim();
-                const pass = document.getElementById('login-password').value;
-
-                if (this.authMode === 'login') {
-                    const u = this.users.find(x => x.email === email && x.password === pass);
-                    if (u) {
-                        this.currentUser = u;
-                        this.saveState();
-                        this.navigate('dashboard');
-                    } else { alert("Credenciais corporativas inválidas na rede."); }
-                } else {
-                    const name = document.getElementById('reg-name').value.trim();
-                    const phone = document.getElementById('reg-phone').value.trim();
-                    if (this.users.some(x => x.email === email)) return alert("Este e-mail corporativo já consta na base central.");
-                    const newUser = { name, phone, email, password: pass, role: "Corretor", entregasRealizadas: 0, isBlocked: false };
-                    this.users.push(newUser);
-                    this.currentUser = newUser;
-                    this.saveState();
-                    this.navigate('dashboard');
-                }
-            }
-
-            actionLogout() {
-                this.currentUser = null;
-                localStorage.removeItem('iamobi_current_user');
-                this.refreshAllScreens();
-                this.navigate('home');
-            }
-
-            /* --- DASHBOARD: SAAS TABS E CRM --- */
-            switchDashTab(targetTabId) {
-                document.querySelectorAll('.app-tab-panel').forEach(panel => panel.classList.remove('active-view'));
-                const target = document.getElementById(targetTabId);
-                if (target) target.classList.add('active-view');
-
-                document.querySelectorAll('.dash-menu-item').forEach(m => m.classList.remove('active'));
-                const menuTarget = document.getElementById('menu-' + targetTabId);
-                if (menuTarget) menuTarget.classList.add('active');
-            }
-
-            renderDashboard() {
-                document.getElementById('dash-user-name').innerText = this.currentUser.name;
-                document.getElementById('dash-user-role').innerText = `Nível: ${this.currentUser.role}`;
-
-                if (this.currentUser.role === 'Admin') {
-                    document.getElementById('menu-pane-auditoria').style.display = 'flex';
-                    this.renderAdminUsersTable();
-                } else {
-                    document.getElementById('menu-pane-auditoria').style.display = 'none';
-                }
-
-                this.renderBrokerPropertiesTable();
-                this.renderBrokerLeadsCRM();
-            }
-
-            renderBrokerLeadsCRM() {
-                const container = document.getElementById('crm-leads-container');
-                if (!container) return;
-                container.innerHTML = '';
-
-                let filteredLeads = [];
-                if (this.currentUser.role === 'Admin') {
-                    filteredLeads = this.leads;
-                } else {
-                    const myPropIds = this.properties.filter(p => p.author === this.currentUser.email).map(p => p.id);
-                    filteredLeads = this.leads.filter(l => myPropIds.includes(l.propertyId) || l.propertyId === 'Geral');
-                }
-
-                if (filteredLeads.length === 0) {
-                    container.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding:2rem; font-weight:600;">Nenhum lead capturado até o momento pelo Funil.</div>`;
-                    return;
-                }
-
-                filteredLeads.forEach(lead => {
-                    const cleanPhone = String(lead.phone).replace(/\D/g, '');
-                    const isAgendado = lead.status === 'agendado';
-                    const card = document.createElement('div');
-                    card.style = `background: var(--bg-surface); padding: 18px; border-radius: 12px; border: 1px solid rgba(128,128,128,0.2); transition: box-shadow 0.2s;`;
-                    card.innerHTML = `
-                        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                            <div>
-                                <h4 style="color:var(--text-main); font-size:1.1rem; margin-bottom:4px;">${lead.name}</h4>
-                                <a href="https://wa.me/${cleanPhone}" target="_blank" style="color:var(--google-green); text-decoration:none; font-weight:700; font-size:0.9rem; display:block; margin-bottom:8px;">🟢 WhatsApp: ${lead.phone}</a>
-                                <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:4px;"><strong>Origem:</strong> ${lead.propertyTitle || 'Direto da Plataforma'}</p>
-                                <p style="color:var(--text-muted); font-size:0.85rem;"><strong>Data:</strong> ${lead.date || '-'}</p>
-                                ${isAgendado ? `<span style="display:inline-block; margin-top:10px; font-size:0.75rem; background:rgba(26,115,232,0.1); color:var(--google-blue); padding:4px 10px; border-radius:6px; font-weight:bold;">✅ PROPOSTA AGENDADA</span>` : ''}
-                            </div>
-                        </div>
-                        <div class="crm-actions" style="margin-top:16px; border-top:1px solid rgba(128,128,128,0.1); padding-top:16px;">
-                            ${!isAgendado ? `<button class="btn-crm-schedule" onclick="app.actionScheduleProposal('${lead.id}')">📅 Agendar para Proposta</button>` : ''}
-                            <button class="btn-crm-delete" onclick="app.actionDeleteLead('${lead.id}')">🗑️ Excluir Lead</button>
-                        </div>
-                    `;
-                    container.appendChild(card);
-                });
-            }
-
-            actionScheduleProposal(leadId) {
-                const idx = this.leads.findIndex(l => l.id === leadId);
-                if (idx !== -1) {
-                    this.leads[idx].status = 'agendado';
-                    this.saveState();
-                    alert(`O Lead foi movido no Funil para a etapa: Agendado para Proposta!`);
-                }
-            }
-
-            actionDeleteLead(leadId) {
-                if (confirm('Tem certeza que deseja excluir permanentemente este lead da base de dados do CRM?')) {
-                    this.leads = this.leads.filter(l => l.id !== leadId);
-                    this.saveState();
-                }
-            }
-
-            /* --- GESTÃO DE IMÓVEIS E RENDERIZAÇÕES PÚBLICAS --- */
-            renderPublicGrid(filteredData = null) {
-                const grid = document.getElementById('public-properties-grid');
-                if (!grid) return;
-                grid.innerHTML = '';
-
-                const validEmails = this.users.filter(u => u.role === 'Admin' || !u.isBlocked).map(u => u.email);
-                const data = (filteredData || this.properties).filter(p => validEmails.includes(p.author));
-
-                if (data.length === 0) {
-                    grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; color:var(--text-muted); padding:3rem; font-weight:600;">Nenhum anúncio localizado na malha de servidores do R2.</div>`;
-                    return;
-                }
-
-                data.forEach(p => {
-                    const card = document.createElement('div');
-                    card.className = 'card';
-                    const images = p.image ? p.image.split(',').map(s => s.trim()).filter(s => s.length > 0) : [];
-                    const activeIdx = this.carouselIndices[p.id] || 0;
-                    
-                    let carouselHtml = '';
-                    if (images.length > 0) {
-                        // APLICA O MOTOR IMGIX AQUI
-                        const optimizedUrl = this.getOptimizedImage(images[activeIdx]);
-                        
-                        carouselHtml = `
-                            <div style="position:relative; height:240px; background:#e2e8f0; overflow:hidden;">
-                                <img src="${optimizedUrl}" id="img-card-${p.id}" style="width:100%; height:100%; object-fit:cover;" loading="lazy">
-                                ${images.length > 1 ? `
-                                    <button onclick="event.stopPropagation(); app.prevCardImg('${p.id}', ${JSON.stringify(images).replace(/"/g, '&quot;')})" style="position:absolute; left:10px; top:50%; transform:translateY(-50%); background:rgba(0,0,0,0.6); color:white; border:none; width:30px; height:30px; border-radius:50%; cursor:pointer; z-index:15; font-weight:bold;">‹</button>
-                                    <button onclick="event.stopPropagation(); app.nextCardImg('${p.id}', ${JSON.stringify(images).replace(/"/g, '&quot;')})" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); background:rgba(0,0,0,0.6); color:white; border:none; width:30px; height:30px; border-radius:50%; cursor:pointer; z-index:15; font-weight:bold;">›</button>
-                                ` : ''}
-                            </div>
-                        `;
-                    } else {
-                        carouselHtml = `<div class="card-media-mock" style="color:var(--text-muted); font-weight:600;">📸 Sem Imagens Cadastradas</div>`;
-                    }
-
-                    card.innerHTML = `
-                        <span class="card-badge">${p.type}</span>
-                        ${carouselHtml}
-                        ${p.video ? `<div class="video-indicator" onclick="event.stopPropagation(); app.openMediaViewerDirect('${p.video}')">▶ Vídeo Tour</div>` : ''}
-                        <div class="card-body" onclick="app.openPropertyDetailModal('${p.id}')" style="cursor:pointer;">
-                            <h3 style="font-size:1.3rem; margin-bottom:0.5rem; color:var(--text-main); font-weight:800; line-height:1.3;">${p.title}</h3>
-                            <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:1rem;">📍 ${p.location}</p>
-                            <div class="card-price">R$ ${Number(p.price).toLocaleString('pt-BR')}</div>
-                            ${p.type === 'Ágio' ? `<div style="font-size:0.8rem; color:var(--premium-gold); background:var(--bg-input); padding:10px; border-radius:8px; margin-top:8px; border-left:3px solid var(--premium-gold); font-weight:600;">Valor do Ágio: R$ ${Number(p.agioPaid || 0).toLocaleString('pt-BR')}</div>` : ''}
-                        </div>
-                    `;
-                    grid.appendChild(card);
-                });
-            }
-
-            prevCardImg(id, images) {
-                if (!this.carouselIndices[id]) this.carouselIndices[id] = 0;
-                this.carouselIndices[id] = (this.carouselIndices[id] - 1 + images.length) % images.length;
-                document.getElementById(`img-card-${id}`).src = this.getOptimizedImage(images[this.carouselIndices[id]]);
-            }
-
-            nextCardImg(id, images) {
-                if (!this.carouselIndices[id]) this.carouselIndices[id] = 0;
-                this.carouselIndices[id] = (this.carouselIndices[id] + 1) % images.length;
-                document.getElementById(`img-card-${id}`).src = this.getOptimizedImage(images[this.carouselIndices[id]]);
-            }
-
-            executeSearch() {
-                const type = document.getElementById('search-type').value;
-                const queryText = document.getElementById('search-location-query').value.toLowerCase().trim();
-                let filtered = this.allProperties; // Aplica o filtro na base Cloud
-                if (type) filtered = filtered.filter(p => p.type === type);
-                if (queryText) filtered = filtered.filter(p => p.location.toLowerCase().includes(queryText) || p.title.toLowerCase().includes(queryText));
-                this.renderPublicGrid(filtered);
-            }
-
-            clearSearchFilters() {
-                document.getElementById('search-type').value = '';
-                document.getElementById('search-location-query').value = '';
-                this.renderPublicGrid();
-            }
-
-            /* --- MODAIS DE LEADS, DEEP LINK E WHATSAPP DEFENSIVO --- */
-            openPropertyDetailModal(id) {
-                const p = this.properties.find(x => x.id === id);
-                if (!p) return;
-                this.selectedPropertyForLead = p;
-
-                document.getElementById('md-title').innerText = p.title;
-                document.getElementById('md-location').innerText = `📍 ${p.location}`;
-                document.getElementById('md-price').innerText = `R$ ${Number(p.price).toLocaleString('pt-BR')}`;
-                document.getElementById('md-description').innerText = p.description || "Nenhum memorial descritivo anexado.";
-                
-                const deepLink = `${window.location.origin}${window.location.pathname}#view-property=${p.id}`;
-                document.getElementById('md-share-url').innerText = deepLink;
-
-                const agioContainer = document.getElementById('md-agio-container');
-                if (p.type === 'Ágio') {
-                    agioContainer.style.display = 'block';
-                    document.getElementById('md-agio-paid').innerText = `R$ ${Number(p.agioPaid || 0).toLocaleString('pt-BR')}`;
-                    document.getElementById('md-agio-remaining').innerText = `R$ ${Number(p.agioRemaining || 0).toLocaleString('pt-BR')}`;
-                    document.getElementById('md-agio-installment').innerText = `R$ ${Number(p.agioInstallment || 0).toLocaleString('pt-BR')}/mês`;
-                    document.getElementById('md-agio-bank').innerText = p.agioBank || "Não Especificado";
-                } else { agioContainer.style.display = 'none'; }
-
-                const container = document.getElementById('md-video-container');
-                container.innerHTML = '';
-                if (p.video) {
-                    if (p.video.includes('youtube.com') || p.video.includes('youtu.be')) {
-                        let videoId = p.video.includes('v=') ? p.video.split('v=')[1].split('&')[0] : p.video.split('/').pop();
-                        container.innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
-                    } else if (p.video.includes('.m3u8') || p.video.includes('.mp4')) {
-                        container.innerHTML = `<video src="${p.video}" controls playsinline webkit-playsinline style="width:100%; height:100%; object-fit:contain;"></video>`;
-                    } else {
-                        container.innerHTML = `<div style="color:var(--text-muted); font-size:0.85rem; padding:20px; text-align:center;">Link externo multimídia: <a href="${p.video}" target="_blank" style="color:var(--google-blue);">Abrir Mídia</a></div>`;
-                    }
-                } else {
-                    container.innerHTML = `<div style="color:var(--text-muted); font-weight:600;">Nenhum tour virtual anexado.</div>`;
-                }
-
-                this.injectSchemaSEO(p);
-                this.openModal('modal-property-detail');
-            }
-
-            injectSchemaSEO(p) {
-                const schema = { "@context": "https://schema.org/", "@type": "Product", "name": p.title, "offers": { "@type": "Offer", "price": p.price } };
-                document.getElementById('seo-schema').text = JSON.stringify(schema);
-            }
-
-            copyConversionLink() {
-                if (!this.selectedPropertyForLead) return;
-                const link = `${window.location.origin}${window.location.pathname}#view-property=${this.selectedPropertyForLead.id}`;
-                navigator.clipboard.writeText(link).then(() => alert("Link de tráfego copiado!"));
-            }
-
-            catchUrlDeepLink() {
-                if (window.location.hash.startsWith('#view-property=')) {
-                    const id = window.location.hash.split('=')[1];
-                    if (id) setTimeout(() => { this.openPropertyDetailModal(id); }, 600);
-                }
-            }
-
-            contactBrokerResponsible() {
-                if (this.currentUser) this.executeWhatsappRedirect();
-                else { this.closeModal('modal-property-detail'); this.openModal('modal-gate-capture'); }
-            }
-
-            actionSaveLead(event) {
-                event.preventDefault();
-                const leadObj = {
-                    id: String(Date.now()),
-                    name: document.getElementById('lead-name').value.trim(),
-                    phone: document.getElementById('lead-phone').value.trim(),
-                    propertyId: this.selectedPropertyForLead ? this.selectedPropertyForLead.id : 'Geral',
-                    propertyTitle: this.selectedPropertyForLead ? this.selectedPropertyForLead.title : 'Atendimento Geral',
-                    date: new Date().toLocaleDateString('pt-BR'),
-                    status: 'novo'
-                };
-                this.leads.push(leadObj);
-                this.saveState();
-                this.closeModal('modal-gate-capture');
-                alert("Contato registrado no CRM da plataforma! Direcionando para o WhatsApp...");
-                this.executeWhatsappRedirect();
-            }
-
-            executeWhatsappRedirect() {
-                if (!this.selectedPropertyForLead) return;
-                let broker = this.users.find(u => u.email === this.selectedPropertyForLead.author);
-                if (!broker || !broker.phone) broker = { name: "Plantão Especialista", phone: "5561983446343" };
-                const rawPhone = broker.phone ? String(broker.phone) : "5561983446343";
-                const cleanPhone = rawPhone.replace(/\D/g, '');
-                const textMsg = `Olá! Tenho interesse no seu anúncio: "${this.selectedPropertyForLead.title}". Pode me passar mais informações?`;
-                window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(textMsg)}`, '_blank');
-            }
-
-            /* --- FORMULÁRIOS DE CRUD IMÓVEIS --- */
-            openPropertyFormModal() {
-                if (this.currentUser.role !== 'Admin' && this.currentUser.isBlocked) {
-                    alert("Aviso de Compliance: Sua conta está bloqueada por exceder o limite do KPI. Regularize o faturamento via PIX.");
-                    return;
-                }
-                document.getElementById('p-id').value = '';
-                document.getElementById('p-title').value = '';
-                document.getElementById('p-type').value = 'Ágio';
-                document.getElementById('p-price').value = '';
-                document.getElementById('p-location').value = '';
-                document.getElementById('p-image').value = '';
-                document.getElementById('p-video').value = '';
-                document.getElementById('p-description').value = '';
-                this.handleFormTypeChange();
-                document.getElementById('p-agio-paid').value = '';
-                document.getElementById('p-agio-remaining').value = '';
-                document.getElementById('p-agio-installment').value = '';
-                document.getElementById('p-agio-bank').value = '';
-                document.getElementById('form-prop-title').innerText = "Cadastrar Novo Anúncio";
-                this.openModal('modal-property-form');
-            }
-
-            handleFormTypeChange() {
-                const type = document.getElementById('p-type').value;
-                document.getElementById('form-agio-exclusive-fields').style.display = (type === 'Ágio') ? 'grid' : 'none';
-            }
-
-            openEditPropertyModal(id) {
-                const p = this.properties.find(x => x.id === id);
-                if (!p) return;
-                document.getElementById('p-id').value = p.id;
-                document.getElementById('p-title').value = p.title;
-                document.getElementById('p-type').value = p.type;
-                document.getElementById('p-price').value = p.price;
-                document.getElementById('p-location').value = p.location;
-                document.getElementById('p-image').value = p.image || '';
-                document.getElementById('p-video').value = p.video || '';
-                document.getElementById('p-description').value = p.description || '';
-                this.handleFormTypeChange();
-                if (p.type === 'Ágio') {
-                    document.getElementById('p-agio-paid').value = p.agioPaid || '';
-                    document.getElementById('p-agio-remaining').value = p.agioRemaining || '';
-                    document.getElementById('p-agio-installment').value = p.agioInstallment || '';
-                    document.getElementById('p-agio-bank').value = p.agioBank || '';
-                }
-                document.getElementById('form-prop-title').innerText = "Editar Anúncio Cadastrado";
-                this.openModal('modal-property-form');
-            }
-
-            savePropertyAction(event) {
-                event.preventDefault();
-                const id = document.getElementById('p-id').value;
-                const type = document.getElementById('p-type').value;
-                let pObj = {
-                    id: id || String(Date.now()),
-                    title: document.getElementById('p-title').value,
-                    type: type,
-                    price: document.getElementById('p-price').value,
-                    location: document.getElementById('p-location').value,
-                    image: document.getElementById('p-image').value,
-                    video: document.getElementById('p-video').value,
-                    description: document.getElementById('p-description').value,
-                    author: id ? this.properties.find(x => x.id === id).author : this.currentUser.email
-                };
-                if (type === 'Ágio') {
-                    pObj.agioPaid = Number(document.getElementById('p-agio-paid').value || 0);
-                    pObj.agioRemaining = Number(document.getElementById('p-agio-remaining').value || 0);
-                    pObj.agioInstallment = Number(document.getElementById('p-agio-installment').value || 0);
-                    pObj.agioBank = document.getElementById('p-agio-bank').value.trim();
-                }
-
-                if (id) {
-                    const idx = this.properties.findIndex(x => x.id === id);
-                    if (idx !== -1) this.properties[idx] = pObj;
-                } else {
-                    this.properties.push(pObj);
-                    if (this.currentUser.role !== 'Admin') {
-                        this.currentUser.entregasRealizadas = (this.currentUser.entregasRealizadas || 0) + 1;
-                        if (this.currentUser.entregasRealizadas >= this.CONFIG_PIX.limiteEntregas) {
-                            this.currentUser.isBlocked = true;
-                        }
-                        const uIdx = this.users.findIndex(u => u.email === this.currentUser.email);
-                        if (uIdx !== -1) {
-                            this.users[uIdx].entregasRealizadas = this.currentUser.entregasRealizadas;
-                            this.users[uIdx].isBlocked = this.currentUser.isBlocked;
-                        }
-                    }
-                }
-                this.saveState();
-                this.closeModal('modal-property-form');
-                
-                // Exibe o alerta para automatizar o R2 e baixa o arquivo
-                alert("Anúncio Salvo! O arquivo 'imoveis.json' com as atualizações será baixado no seu computador. Jogue este arquivo no seu painel do Cloudflare R2 para atualizar o site para TODOS instantaneamente!");
-                this.downloadCloudflareDatabase();
-            }
-
-            actionDeleteProperty(id) {
-                if (confirm("Deseja excluir permanentemente este anúncio?")) {
-                    this.properties = this.properties.filter(x => x.id !== id);
-                    this.saveState();
-                    alert("Anúncio deletado. O novo arquivo 'imoveis.json' será baixado para você atualizar no R2.");
-                    this.downloadCloudflareDatabase();
-                }
-            }
-
-            renderBrokerPropertiesTable() {
-                const tbody = document.getElementById('broker-properties-tbody');
-                if (!tbody) return;
-                tbody.innerHTML = '';
-                const data = this.currentUser.role === 'Admin' ? this.properties : this.properties.filter(p => p.author === this.currentUser.email);
-                if (data.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted); padding:1rem;">Nenhum imóvel listado.</td></tr>`;
-                    return;
-                }
-                data.forEach(p => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `<td data-label="Imóvel"><b>${p.title}</b></td><td data-label="Tipo"><span class="pricing-badge">${p.type}</span></td><td data-label="Localização">${p.location}</td><td data-label="Preço">R$ ${Number(p.price).toLocaleString('pt-BR')}</td><td data-label="Ações"><button class="nav-link" style="color:var(--google-blue); display:inline; padding:0;" onclick="app.openEditPropertyModal('${p.id}')">Editar</button> | <button class="nav-link" style="color:var(--tesla-red); display:inline; padding:0;" onclick="app.actionDeleteProperty('${p.id}')">Excluir</button></td>`;
-                    tbody.appendChild(tr);
-                });
-            }
-
-            renderAdminUsersTable() {
-                const tbody = document.getElementById('admin-users-tbody');
-                if (!tbody) return;
-                tbody.innerHTML = '';
-                this.users.forEach(u => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `<td data-label="Nome"><b>${u.name}</b></td><td data-label="E-mail">${u.email}</td><td data-label="Nível">${u.role}</td><td data-label="KPI">${u.entregasRealizadas || 0} / ${this.CONFIG_PIX.limiteEntregas}</td><td data-label="Status"><span style="color:${u.isBlocked?'var(--tesla-red)':'var(--google-green)'}; font-weight:bold;">${u.isBlocked?'Inadimplente':'Ativo'}</span></td><td data-label="Ações">${u.role !== 'Admin' ? `<button class="nav-link" style="color:var(--tesla-red); display:inline; padding:0;" onclick="app.toggleBlockUser('${u.email}')">${u.isBlocked ? 'Desbloquear' : 'Bloquear'}</button>` : '-'}</td>`;
-                    tbody.appendChild(tr);
-                });
-            }
-
-            toggleBlockUser(email) {
-                const idx = this.users.findIndex(u => u.email === email);
-                if (idx !== -1) {
-                    this.users[idx].isBlocked = !this.users[idx].isBlocked;
-                    this.saveState();
-                }
-            }
-
-            /* --- GESTÃO PIX --- */
-            simulateBillingExpiration() {
-                if (this.currentUser && this.currentUser.role !== 'Admin') {
-                    this.currentUser.entregasRealizadas = this.CONFIG_PIX.limiteEntregas;
-                    this.currentUser.isBlocked = true;
-                    const idx = this.users.findIndex(u => u.email === this.currentUser.email);
-                    if (idx !== -1) { this.users[idx].entregasRealizadas = this.CONFIG_PIX.limiteEntregas; this.users[idx].isBlocked = true; }
-                    this.saveState();
-                    alert("Inadimplência forçada para testes do sistema.");
-                } else alert("Administradores centrais são isentos de faturamento.");
-            }
-
-            resetBilling() {
-                const payloadPix = `00020101021126580014br.gov.bcb.pix0136342599988545204000053039865404${this.CONFIG_PIX.valorRenovacao.toFixed(2)}5802BR5916PartnerHolding6008Brasilia62070503***6304A1B2`;
-                document.getElementById('pix-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(payloadPix)}`;
-                const container = document.getElementById('pix-payload-container');
-                container.innerText = payloadPix;
-                container.style.display = 'block';
-                document.getElementById('pix-copy-btn').onclick = () => { navigator.clipboard.writeText(payloadPix).then(() => alert("PIX Copiado!")); };
-                this.openModal('modal-pix-payment');
-            }
-
-            processPixPayment() {
-                if (!this.currentUser) return;
-                this.currentUser.entregasRealizadas = 0;
-                this.currentUser.isBlocked = false;
-                const idx = this.users.findIndex(u => u.email === this.currentUser.email);
-                if (idx !== -1) { this.users[idx].entregasRealizadas = 0; this.users[idx].isBlocked = false; }
-                this.saveState();
-                this.closeModal('modal-pix-payment');
-                alert("Conciliação Bancária Confirmada! Limite de anúncios renovado.");
-            }
-
-            checkBillingStatusUI() {
-                const lbl = document.getElementById('billing-status-lbl');
-                const banner = document.getElementById('global-billing-alert');
-                if (!this.currentUser) { if(banner) banner.style.display = 'none'; return; }
-
-                if (this.currentUser.role === 'Admin') {
-                    if (lbl) { lbl.innerText = "Licença Master (Isento)"; lbl.style.color = "var(--google-blue)"; }
-                    if (banner) banner.style.display = 'none';
-                    return;
-                }
-
-                if (this.currentUser.isBlocked || (this.currentUser.entregasRealizadas >= this.CONFIG_PIX.limiteEntregas)) {
-                    this.currentUser.isBlocked = true;
-                    if (lbl) { lbl.innerText = `Licença Suspensa (${this.currentUser.entregasRealizadas}/${this.CONFIG_PIX.limiteEntregas})`; lbl.style.color = "var(--tesla-red)"; }
-                    if (banner) { banner.style.display = 'flex'; banner.innerHTML = `<span>⚠️ Bloqueio: Limite atingido (${this.currentUser.entregasRealizadas}/${this.CONFIG_PIX.limiteEntregas}). Renove via PIX no painel.</span>`; }
-                } else {
-                    if (lbl) { lbl.innerText = `Ativo (${this.currentUser.entregasRealizadas || 0}/${this.CONFIG_PIX.limiteEntregas} anúncios consumidos)`; lbl.style.color = "var(--google-green)"; }
-                    if (banner) banner.style.display = 'none';
-                }
-            }
-
-            /* --- UTILITÁRIOS E MODAIS GERAIS --- */
-            openDrivePicker(targetInputId) {
-                this.activeDriveTargetInputId = targetInputId;
-                const c = document.getElementById('drive-files-container');
-                if (!c) return; c.innerHTML = '';
-                const mocks = [
-                    { name: "📸 Link Base", url: "https://pub-84193ad5106b49e69df6f4d2a13f04fe.r2.dev/foto1.png" }
-                ];
-                mocks.forEach(f => {
-                    const item = document.createElement('div'); item.className = 'drive-item';
-                    item.innerHTML = `<div><b>${f.name}</b><br><small style="color:var(--text-muted);">${f.url}</small></div>`;
-                    item.onclick = () => this.chooseDriveFile(f.url); c.appendChild(item);
-                });
-                this.openModal('modal-drive-picker');
-            }
-
-            chooseDriveFile(url) {
-                if (this.activeDriveTargetInputId) {
-                    const input = document.getElementById(this.activeDriveTargetInputId);
-                    if (input) input.value = input.value ? input.value + ',' + url : url;
-                }
-                this.closeModal('modal-drive-picker');
-            }
-
-            handleLocalImages(input) {
-                if (input.files && input.files.length > 0) {
-                    let tempUrls = [];
-                    for (let i = 0; i < input.files.length; i++) tempUrls.push(URL.createObjectURL(input.files[i]));
-                    const field = document.getElementById('p-image');
-                    if (field) field.value = field.value ? field.value + ',' + tempUrls.join(',') : tempUrls.join(',');
-                    alert("Imagens locais adicionadas temporariamente via ObjectURL.");
-                }
-            }
-
-            handleLocalVideo(input) {
-                if (input.files && input.files[0]) {
-                    const field = document.getElementById('p-video');
-                    if (field) field.value = URL.createObjectURL(input.files[0]);
-                    alert("Vídeo adicionado temporariamente via ObjectURL.");
-                }
-            }
-
-            openMediaViewerDirect(videoUrl) {
-                const box = document.getElementById('media-viewer-box');
-                if (!box) return; box.innerHTML = '';
-                if (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')) {
-                    let id = videoUrl.includes('v=') ? videoUrl.split('v=')[1].split('&')[0] : videoUrl.split('/').pop();
-                    box.innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${id}?autoplay=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-                } else if (videoUrl.includes('.m3u8') || videoUrl.includes('.mp4') || videoUrl.startsWith('blob:')) {
-                    box.innerHTML = `<video src="${videoUrl}" controls autoplay playsinline webkit-playsinline style="width:100%; height:100%; object-fit:contain;"></video>`;
-                } else {
-                    box.innerHTML = `<div style="color:white; padding:20px; text-align:center;">Formato não suportado nativamente. Abrindo externamente...</div>`;
-                    window.open(videoUrl, '_blank'); return;
-                }
-                this.openModal('modal-media-viewer');
-            }
-
-            closeMediaViewer() {
-                const box = document.getElementById('media-viewer-box');
-                if (box) box.innerHTML = '';
-                this.closeModal('modal-media-viewer');
-            }
-
-            openModal(id) { const m = document.getElementById(id); if (m) m.classList.add('active'); }
-            closeModal(id) { const m = document.getElementById(id); if (m) m.classList.remove('active'); }
-
-            applySavedTheme() {
-                const saved = localStorage.getItem('iamobi_theme') || 'light';
-                document.documentElement.setAttribute('data-theme', saved);
-            }
-
-            toggleTheme() {
-                const cur = document.documentElement.getAttribute('data-theme');
-                const next = (cur === 'dark') ? 'light' : 'dark';
-                document.documentElement.setAttribute('data-theme', next);
-                localStorage.setItem('iamobi_theme', next);
-            }
-        }
-
-        const app = new ImobiApp();
-    </script>
-<script src="https://cdn.gpteng.co/lovable.js" type="module"></script>
-<aside
-	id="lovable-badge"
-	role="complementary"
-	dir="ltr"
-	lang="en"
-	aria-label="Edit with Lovable">
-	<a
-		id="lovable-badge-cta" 
-		target="_blank" 
-		href="https://droppfy.com"
-		rel="noopener nofollow"
-		aria-label="Edit with Lovable">
-		<span id="lovable-badge-text">Edit with</span>
-		<svg xmlns="http://www.w3.org/2000/svg" width="52" height="16" fill="none" viewBox="0 0 52 16">
-  <path fill="#FCFBF8" fill-rule="evenodd" d="M20.318 5.25c.643 0 1.206.14 1.69.418a2.81 2.81 0 0 1 1.118 1.191c.266.513.4 1.115.4 1.807s-.134 1.296-.4 1.812a2.81 2.81 0 0 1-1.118 1.193c-.484.278-1.047.418-1.69.418s-1.208-.14-1.695-.418a2.85 2.85 0 0 1-1.125-1.193c-.262-.516-.393-1.12-.393-1.812s.131-1.294.393-1.807a2.848 2.848 0 0 1 1.125-1.191c.487-.279 1.052-.418 1.695-.418Zm0 1.425c-.27 0-.504.076-.7.228-.193.147-.34.37-.443.67-.102.295-.153.66-.153 1.093 0 .435.05.801.153 1.1.102.3.25.524.443.676.196.147.43.22.7.22.27 0 .502-.073.694-.22.193-.152.341-.375.443-.67.103-.299.153-.667.153-1.106 0-.65-.112-1.145-.337-1.481a1.08 1.08 0 0 0-.953-.51ZM32.7 5.25c.61 0 1.127.1 1.549.3.422.197.74.48.953.849.217.368.325.809.325 1.32v2.704c0 .29.02.562.062.812.044.245.108.4.19.466V12h-1.935a5.895 5.895 0 0 1-.105-.684 7.745 7.745 0 0 1-.02-.228 2.293 2.293 0 0 1-.151.203c-.205.242-.47.437-.793.584-.32.143-.685.215-1.094.215-.406 0-.77-.08-1.094-.24a1.845 1.845 0 0 1-.756-.682 1.984 1.984 0 0 1-.27-1.045c0-.606.178-1.069.535-1.388.356-.324.87-.534 1.542-.633l1.125-.16c.225-.032.403-.074.534-.123a.622.622 0 0 0 .288-.196.549.549 0 0 0 .093-.327.65.65 0 0 0-.11-.367.702.702 0 0 0-.32-.27c-.14-.07-.31-.105-.51-.105-.32 0-.576.083-.768.251-.193.164-.298.39-.314.676h-1.923c.016-.434.147-.82.393-1.155.25-.34.596-.604 1.039-.792.442-.189.954-.283 1.535-.283Zm.99 3.498a.98.98 0 0 1-.215.14 2.49 2.49 0 0 1-.584.178l-.473.092c-.315.061-.553.156-.713.283-.155.127-.233.305-.233.534 0 .23.084.412.252.547.168.135.383.203.645.203s.494-.058.694-.173c.201-.118.355-.282.461-.49.11-.21.166-.448.166-.714v-.6Zm4.526-2.375c.065-.125.138-.243.221-.349.197-.25.437-.44.719-.571.282-.135.6-.203.952-.203.528 0 .988.138 1.377.412.389.275.688.67.896 1.186.21.512.314 1.12.314 1.824 0 .7-.107 1.309-.32 1.825-.213.512-.518.906-.915 1.18-.393.275-.854.412-1.383.412-.352 0-.667-.062-.946-.184a1.832 1.832 0 0 1-.7-.554 2.2 2.2 0 0 1-.234-.383V12h-1.843V3h1.862v3.373Zm1.284.296c-.274 0-.51.085-.707.253-.192.163-.338.397-.436.7a3.376 3.376 0 0 0-.148 1.05c0 .406.05.759.148 1.058.098.299.243.53.436.694.197.164.433.246.707.246.279 0 .512-.082.7-.246.193-.164.336-.395.43-.694.099-.3.148-.652.148-1.058 0-.405-.05-.757-.147-1.056-.095-.299-.238-.53-.43-.694a1.015 1.015 0 0 0-.7-.253Zm9.416-1.419c.602 0 1.136.131 1.604.393.466.262.829.643 1.086 1.143.263.5.394 1.097.394 1.794 0 .25-.002.449-.006.596H47.51c.018.288.071.538.164.75a1.3 1.3 0 0 0 .491.596c.214.13.465.196.757.196.319 0 .583-.082.792-.246.209-.167.34-.403.393-.706h1.862a2.48 2.48 0 0 1-.485 1.235 2.54 2.54 0 0 1-1.051.805c-.439.188-.949.283-1.53.283-.655 0-1.225-.125-1.708-.375a2.672 2.672 0 0 1-1.13-1.143c-.267-.508-.4-1.137-.4-1.887 0-.712.14-1.327.418-1.843a2.86 2.86 0 0 1 1.155-1.186c.491-.27 1.051-.405 1.678-.405Zm-.044 1.345c-.274 0-.516.068-.725.203a1.29 1.29 0 0 0-.479.59 2.045 2.045 0 0 0-.132.498h2.562a1.873 1.873 0 0 0-.138-.602 1.061 1.061 0 0 0-.418-.516 1.243 1.243 0 0 0-.67-.173Z" clip-rule="evenodd"/>
-  <path fill="#FCFBF8" d="m26.605 9.995 1.342-4.566h1.924L27.628 12h-2.07l-2.33-6.57h1.98l1.397 4.565Zm-13.013.143h2.256c1.632 0 1.421 1.837 1.418 1.861h-5.603V3h1.93v7.138Zm31.516 1.861h-1.862V3h1.862v8.999Z"/>
-  <path fill="url(#a)" fill-rule="evenodd" d="M2.7 3c1.492 0 2.7 1.192 2.7 2.663v1.012h.9c1.49 0 2.7 1.192 2.7 2.662S7.791 12 6.3 12H0V5.663C0 4.193 1.209 3 2.7 3Z" clip-rule="evenodd"/>
-  <defs>
-    <radialGradient id="a" cx="0" cy="0" r="1" gradientTransform="matrix(-1.54236 7.07838 -10.231 -2.15602 4.627 5.022)" gradientUnits="userSpaceOnUse">
-      <stop offset=".106" stop-color="#FE7B02"/>
-      <stop offset=".394" stop-color="#FE3F21"/>
-      <stop offset=".608" stop-color="#F858BC"/>
-      <stop offset=".929" stop-color="#575ECF"/>
-    </radialGradient>
-  </defs>
-</svg>
-
-
-	</a>
-	
-	<span id="lovable-badge-divider" aria-hidden="true"></span>
-	
-	<button 
-		id="lovable-badge-close"
-		aria-label="Dismiss"
-		title="Dismiss"
-		type="button">
-		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16" aria-hidden="true">
-			<path d="M10.646 4.646a.5.5 0 1 1 .707.708L8.707 8l2.646 2.646a.5.5 0 1 1-.707.707L8 8.707l-2.646 2.646a.5.5 0 1 1-.708-.707L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708L8 7.293l2.646-2.647Z"/>
-		</svg>
-	</button>
-</aside>
-<script>
-	// Don't show the lovable-badge if the page is in an iframe or if it's being rendered by puppeteer (screenshot service)
-	if (window.self !== window.top || navigator.userAgent.includes('puppeteer')) {
-		var badge = document.getElementById('lovable-badge');
-		if (badge) {
-			badge.style.display = 'none';
-		}
-	}
-
-	// Add click event listener to close button with animation
-	var closeButton = document.getElementById('lovable-badge-close');
-	if (closeButton) {
-		closeButton.addEventListener('click', function(event) {
-			event.preventDefault();
-			event.stopPropagation();
-			var badge = document.getElementById('lovable-badge');
-			if (badge) {
-				badge.classList.add('closing');
-				setTimeout(function() {
-					if (badge) {
-						badge.style.display = 'none';
-					}
-				}, 240);
-			}
-		});
-	}
-</script>
 </body>
 </html>
