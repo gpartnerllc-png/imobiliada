@@ -3,458 +3,274 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>IMOBI — Curadoria Imobiliária</title>
+<title>IMOBI — Painel</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
     --areia-claro:#FBF6ED; --areia:#F3E9D8; --marfim:#FFFCF6;
     --ambar:#CDA05F; --ambar-suave:#E4C68C; --bronze:#8C6A45;
     --espresso:#2B2118; --espresso-suave:#5B4C3B; --linha-ouro:rgba(205,160,95,.35);
-    --erro:#9B4A3A; --sucesso:#5C7A5A;
-    --phi-1:.618rem; --phi0:1rem; --phi1:1.618rem; --phi2:2.618rem; --phi3:4.236rem; --phi4:6.854rem;
+    --erro:#9B4A3A; --sucesso:#5C7A5A; --dados:'IBM Plex Mono',monospace;
+    --phi-1:.618rem; --phi0:1rem; --phi1:1.618rem; --phi2:2.618rem; --phi3:4.236rem;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
-  body{font-family:'Inter',sans-serif;color:var(--espresso);min-height:100vh;position:relative;overflow-x:hidden;background:var(--areia-claro);}
+  body{font-family:'Inter',sans-serif;color:var(--espresso);min-height:100vh;background:var(--areia-claro);}
   button{font-family:'Inter',sans-serif;cursor:pointer;}
+  a{color:var(--bronze);}
 
   .aurora{position:fixed;inset:0;z-index:-2;
-    background:radial-gradient(circle at 15% 20%, rgba(228,198,140,.55) 0%, transparent 45%),
-      radial-gradient(circle at 85% 15%, rgba(205,160,95,.4) 0%, transparent 50%),
-      radial-gradient(circle at 50% 90%, rgba(140,106,69,.3) 0%, transparent 55%), var(--areia-claro);
-    background-size:180% 180%,200% 200%,160% 160%,100% 100%;
-    animation:auroraQuieta 32s ease-in-out infinite;}
-  @keyframes auroraQuieta{0%{background-position:0% 30%,100% 10%,50% 100%,0 0;}50%{background-position:60% 70%,20% 60%,80% 40%,0 0;}100%{background-position:0% 30%,100% 10%,50% 100%,0 0;}}
+    background:radial-gradient(circle at 15% 10%, rgba(228,198,140,.4) 0%, transparent 45%),
+      radial-gradient(circle at 90% 90%, rgba(140,106,69,.25) 0%, transparent 55%), var(--areia-claro);}
+  .camada-viva{background:rgba(255,252,246,.6);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);border:1px solid rgba(205,160,95,.28);}
 
-  .camada-viva{background:rgba(255,252,246,.55);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);border:1px solid rgba(205,160,95,.28);}
-
-  header{display:flex;justify-content:space-between;align-items:center;padding:var(--phi1) var(--phi3);position:sticky;top:0;z-index:30;}
-  .marca{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:600;}
+  header{display:flex;justify-content:space-between;align-items:center;padding:var(--phi1) var(--phi3);position:sticky;top:0;z-index:20;}
+  .marca{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:600;}
   .marca span{color:var(--ambar);}
-  nav{display:flex;gap:var(--phi2);font-size:.86rem;font-weight:500;color:var(--espresso-suave);}
-  .acoes-topo{display:flex;gap:.8rem;align-items:center;}
-  .btn-luxo{font-size:.82rem;font-weight:500;letter-spacing:.04em;padding:.75rem var(--phi1);border-radius:100px;background:var(--espresso);color:var(--marfim);border:1px solid var(--espresso);transition:.3s;}
-  .btn-luxo:hover{background:transparent;color:var(--espresso);}
-  .btn-fantasma{font-size:.82rem;font-weight:500;padding:.75rem var(--phi1);border-radius:100px;background:transparent;color:var(--espresso);border:1px solid var(--linha-ouro);}
-  .user-chip{font-size:.8rem;color:var(--espresso-suave);display:flex;align-items:center;gap:.6rem;}
+  .voltar{font-size:.85rem;color:var(--espresso-suave);text-decoration:none;}
+
+  .layout{display:grid;grid-template-columns:240px 1fr;max-width:1360px;margin:0 auto;gap:var(--phi2);padding:0 var(--phi3) var(--phi3);}
+  .lateral{padding-top:var(--phi1);}
+  .lateral .item{display:block;width:100%;text-align:left;background:none;border:none;padding:.85rem 1rem;border-radius:6px;font-size:.9rem;color:var(--espresso-suave);margin-bottom:.3rem;}
+  .lateral .item.ativo{background:var(--espresso);color:var(--marfim);}
+  .lateral .status-licenca{margin-top:var(--phi2);padding:var(--phi1);border-radius:6px;font-size:.8rem;}
+  .lateral .status-licenca strong{display:block;font-family:'Cormorant Garamond',serif;font-size:1.1rem;margin-bottom:.3rem;}
+
+  .painel{padding-top:var(--phi1);}
+  .aba{display:none;}
+  .aba.ativa{display:block;}
+  .aba-titulo{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:500;margin-bottom:var(--phi1);}
+
+  .metricas{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--phi1);margin-bottom:var(--phi2);}
+  .metrica{padding:var(--phi1);border-radius:6px;text-align:center;}
+  .metrica .num{font-family:var(--dados);font-size:1.8rem;color:var(--bronze);}
+  .metrica .lbl{font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--espresso-suave);margin-top:.3rem;}
+
+  table{width:100%;border-collapse:collapse;}
+  th{text-align:left;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--bronze);padding:.7rem;border-bottom:1px solid var(--linha-ouro);}
+  td{padding:.9rem .7rem;border-bottom:1px solid var(--linha-ouro);font-size:.88rem;}
+  .tag{font-size:.68rem;padding:.25rem .6rem;border-radius:100px;text-transform:uppercase;letter-spacing:.05em;}
+  .tag-ativo{background:rgba(92,122,90,.15);color:var(--sucesso);}
+  .tag-vendido{background:rgba(140,106,69,.15);color:var(--bronze);}
+  .acao-link{background:none;border:none;font-size:.8rem;color:var(--bronze);text-decoration:underline;margin-right:.6rem;}
+
+  .lead-card{padding:var(--phi1);border-radius:6px;margin-bottom:var(--phi0);}
+  .lead-topo{display:flex;justify-content:space-between;align-items:center;}
+  .lead-nome{font-family:'Cormorant Garamond',serif;font-size:1.15rem;}
+  .lead-whats{font-size:.82rem;color:var(--sucesso);}
+  .lead-acoes{margin-top:.7rem;display:flex;gap:.5rem;flex-wrap:wrap;}
+  .lead-acoes select{border:1px solid var(--linha-ouro);border-radius:4px;padding:.4rem .6rem;background:var(--marfim);font-size:.8rem;}
+
+  .campo-marca{margin-bottom:var(--phi1);max-width:460px;}
+  .campo-marca label{display:block;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--bronze);margin-bottom:.4rem;}
+  .campo-marca input{width:100%;padding:.7rem .8rem;border:1px solid var(--linha-ouro);border-radius:4px;background:var(--marfim);font-size:.92rem;outline:none;}
+  .btn-luxo{font-size:.82rem;font-weight:500;padding:.75rem var(--phi1);border-radius:100px;background:var(--espresso);color:var(--marfim);border:1px solid var(--espresso);}
+
+  .vazio{text-align:center;padding:var(--phi2);color:var(--espresso-suave);font-size:.9rem;}
+  .msg{font-size:.82rem;padding:.6rem .8rem;border-radius:4px;margin-bottom:var(--phi0);}
+  .msg-sucesso{background:rgba(92,122,90,.12);color:var(--sucesso);}
+  .msg-erro{background:rgba(155,74,58,.1);color:var(--erro);}
   .oculto{display:none !important;}
 
-  .hero{max-width:1360px;margin:0 auto;padding:var(--phi3) var(--phi3) var(--phi2);}
-  .eyebrow{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--bronze);margin-bottom:var(--phi1);}
-  h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(2.2rem,4.4vw,3.6rem);line-height:1.1;max-width:20ch;}
-  h1 em{font-style:italic;color:var(--ambar);}
-  .lead{margin-top:var(--phi1);font-size:1.05rem;color:var(--espresso-suave);max-width:56ch;line-height:1.7;font-weight:300;}
-
-  .ficha-luxo{margin-top:var(--phi2);padding:var(--phi2);border-radius:4px;display:grid;grid-template-columns:1fr 1fr auto;gap:var(--phi2);align-items:end;}
-  .campo label{display:block;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--bronze);margin-bottom:.5rem;}
-  .campo select,.campo input,.campo textarea{width:100%;border:none;border-bottom:1px solid var(--linha-ouro);background:transparent;font-family:'Inter',sans-serif;font-size:1rem;padding:.4rem 0;color:var(--espresso);outline:none;}
-  .campo textarea{resize:vertical;min-height:70px;}
-
-  .secao{max-width:1360px;margin:var(--phi3) auto;padding:0 var(--phi3);}
-  .secao-cabecalho{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:var(--phi2);}
-  .secao-titulo{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:500;}
-  .secao-nota{font-size:.78rem;color:var(--espresso-suave);}
-
-  .grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:var(--phi2);}
-  .card{border-radius:4px;overflow:hidden;transition:transform .5s cubic-bezier(.2,.8,.2,1);cursor:pointer;}
-  .card:hover{transform:translateY(-6px);}
-  .card-foto{height:210px;background:linear-gradient(150deg,var(--areia),var(--ambar-suave));background-size:cover;background-position:center;position:relative;}
-  .card-tag{position:absolute;top:14px;left:14px;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;background:var(--espresso);color:var(--marfim);padding:.35rem .7rem;border-radius:100px;}
-  .card-corpo{padding:var(--phi1) var(--phi1) var(--phi1)}
-  .card-corpo h3{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:500;}
-  .card-local{font-size:.78rem;color:var(--espresso-suave);margin-top:.3rem;}
-  .card-rodape{display:flex;justify-content:space-between;align-items:flex-end;margin-top:var(--phi0);}
-  .card-preco{font-size:1.3rem;font-weight:300;color:var(--bronze);}
-  .card-anunciante{font-size:.74rem;font-style:italic;color:var(--espresso-suave);}
-
-  .estado-vazio{grid-column:1/-1;text-align:center;padding:var(--phi3) var(--phi1);color:var(--espresso-suave);font-size:.95rem;}
-  .estado-vazio strong{display:block;font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--espresso);margin-bottom:.4rem;font-weight:500;}
-
-  /* ===== Modais ===== */
-  .modal-fundo{position:fixed;inset:0;background:rgba(43,33,24,.45);display:none;align-items:center;justify-content:center;z-index:100;padding:1.2rem;}
-  .modal-fundo.ativo{display:flex;}
-  .modal{background:var(--marfim);border-radius:8px;padding:var(--phi2);max-width:460px;width:100%;max-height:90vh;overflow-y:auto;position:relative;}
-  .modal h2{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:500;margin-bottom:var(--phi1);}
-  .modal .fechar{position:absolute;top:var(--phi1);right:var(--phi1);background:none;border:none;font-size:1.2rem;color:var(--espresso-suave);}
-  .campo-modal{margin-bottom:var(--phi0);}
-  .campo-modal label{display:block;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--bronze);margin-bottom:.4rem;}
-  .campo-modal input,.campo-modal select,.campo-modal textarea{width:100%;padding:.7rem .8rem;border:1px solid var(--linha-ouro);border-radius:4px;background:var(--areia-claro);font-family:'Inter',sans-serif;font-size:.95rem;outline:none;}
-  .campo-modal textarea{resize:vertical;min-height:80px;}
-  .linha-2{display:grid;grid-template-columns:1fr 1fr;gap:var(--phi0);}
-  .msg-erro{background:rgba(155,74,58,.1);color:var(--erro);font-size:.82rem;padding:.6rem .8rem;border-radius:4px;margin-bottom:var(--phi0);}
-  .msg-erro.oculto{display:none;}
-  .msg-sucesso{background:rgba(92,122,90,.12);color:var(--sucesso);font-size:.82rem;padding:.6rem .8rem;border-radius:4px;margin-bottom:var(--phi0);}
-  .msg-sucesso.oculto{display:none;}
-  .troca-modo{margin-top:var(--phi1);font-size:.82rem;text-align:center;color:var(--espresso-suave);}
-  .troca-modo a{color:var(--bronze);cursor:pointer;text-decoration:underline;}
-  .campos-agio{border-top:1px dashed var(--linha-ouro);margin-top:var(--phi0);padding-top:var(--phi0);}
-
-  footer{text-align:center;padding:var(--phi3);font-size:.75rem;color:var(--espresso-suave);}
-
-  @media(max-width:900px){
-    .hero,.secao,header{padding-left:var(--phi1);padding-right:var(--phi1);}
-    .ficha-luxo{grid-template-columns:1fr;}
-    nav{display:none;}
-    .linha-2{grid-template-columns:1fr;}
-  }
+  @media(max-width:900px){ .layout{grid-template-columns:1fr;} .metricas{grid-template-columns:1fr;} header,.layout{padding-left:var(--phi1);padding-right:var(--phi1);} }
 </style>
 </head>
 <body>
-
 <div class="aurora"></div>
 
 <header class="camada-viva">
-  <div class="marca">IMOBI <span>·</span></div>
-  <nav>
-    <a href="#" onclick="app.filtrar('todas');return false;">Todos</a>
-    <a href="#" onclick="app.filtrar('agio');return false;">Ágio</a>
-    <a href="#" onclick="app.filtrar('venda_direta');return false;">Venda direta</a>
-    <a href="#" onclick="app.filtrar('locacao_residencial');return false;">Locação</a>
-  </nav>
-  <div class="acoes-topo">
-    <div id="area-visitante" class="acoes-topo">
-      <button class="btn-fantasma" onclick="app.abrirAuth('login')">Entrar</button>
-      <button class="btn-luxo" onclick="app.abrirAuth('cadastro')">Anunciar imóvel</button>
-    </div>
-    <div id="area-logado" class="user-chip oculto">
-      <span id="nome-usuario-logado"></span>
-      <button class="btn-luxo" onclick="app.abrirPublicar()">Publicar imóvel</button>
-      <button class="btn-fantasma" onclick="app.logout()">Sair</button>
-    </div>
-  </div>
+  <div class="marca">IMOBI <span>·</span> Painel</div>
+  <a class="voltar" href="imobi_app.html">← Voltar à vitrine</a>
 </header>
 
-<section class="hero">
-  <div class="eyebrow">Curadoria imobiliária · Distrito Federal</div>
-  <h1>Cada endereço tem<br>uma <em>luz</em> própria.</h1>
-  <p class="lead">Uma vitrine só, para todas as marcas: corretores, imobiliárias, construtoras, incorporadoras, correspondentes Caixa e proprietários — cada um com identidade e recebimento próprios.</p>
-
-  <div class="ficha-luxo camada-viva">
-    <div class="campo">
-      <label>Modalidade</label>
-      <select id="busca-modalidade">
-        <option value="todas">Todas as opções</option>
-        <option value="agio">Negociação de Ágio</option>
-        <option value="venda_direta">Venda direta</option>
-        <option value="locacao_residencial">Locação residencial</option>
-      </select>
+<div class="layout">
+  <aside class="lateral camada-viva" style="border-radius:6px;padding:1rem;">
+    <button class="item ativo" data-aba="anuncios" onclick="app.trocarAba('anuncios')">Meus anúncios</button>
+    <button class="item" data-aba="leads" onclick="app.trocarAba('leads')">Funil de leads</button>
+    <button class="item" data-aba="marca" onclick="app.trocarAba('marca')">Minha marca</button>
+    <div class="status-licenca camada-viva" id="status-licenca">
+      <strong>Carregando…</strong>
     </div>
-    <div class="campo">
-      <label>Localização / palavra-chave</label>
-      <input type="text" id="busca-q" placeholder="Águas Claras, Sudoeste...">
-    </div>
-    <button class="btn-luxo" onclick="app.carregarListings()">Buscar</button>
-  </div>
-</section>
+  </aside>
 
-<section class="secao">
-  <div class="secao-cabecalho">
-    <h2 class="secao-titulo">Vitrine da rede</h2>
-    <span class="secao-nota" id="contador-resultados"></span>
-  </div>
-  <div class="grade" id="grade-imoveis">
-    <div class="estado-vazio"><strong>Carregando a vitrine…</strong>Buscando os imóveis publicados por toda a rede.</div>
-  </div>
-</section>
-
-<footer>IMOBI — Curadoria imobiliária multi-marca · Distrito Federal e Entorno</footer>
-
-<!-- ===== Modal: Login / Cadastro ===== -->
-<div class="modal-fundo" id="modal-auth">
-  <div class="modal camada-viva">
-    <button class="fechar" onclick="app.fecharModal('modal-auth')">✕</button>
-    <div id="auth-erro" class="msg-erro oculto"></div>
-
-    <div id="bloco-login">
-      <h2>Entrar</h2>
-      <div class="campo-modal"><label>E-mail</label><input type="email" id="login-email"></div>
-      <div class="campo-modal"><label>Senha</label><input type="password" id="login-senha"></div>
-      <button class="btn-luxo" style="width:100%" onclick="app.login()">Entrar</button>
-      <div class="troca-modo">Ainda não tem conta? <a onclick="app.trocarAuth('cadastro')">Cadastre-se</a></div>
+  <main class="painel">
+    <div id="login-necessario" class="camada-viva" style="padding:var(--phi2);border-radius:6px;">
+      <p>Você precisa entrar com sua conta na vitrine principal antes de acessar o painel.</p>
+      <a href="imobi_app.html" class="btn-luxo" style="display:inline-block;margin-top:var(--phi1);text-decoration:none;">Ir para a vitrine</a>
     </div>
 
-    <div id="bloco-cadastro" class="oculto">
-      <h2>Criar conta</h2>
-      <div class="campo-modal">
-        <label>Você é</label>
-        <select id="cad-tipo">
-          <option value="corretor">Corretor autônomo</option>
-          <option value="imobiliaria">Imobiliária</option>
-          <option value="construtora">Construtora</option>
-          <option value="incorporadora">Incorporadora</option>
-          <option value="correspondente_caixa">Correspondente Caixa</option>
-          <option value="proprietario">Proprietário direto</option>
-        </select>
+    <div id="conteudo-painel" class="oculto">
+      <div class="metricas">
+        <div class="metrica camada-viva"><div class="num" id="m-anuncios">–</div><div class="lbl">Anúncios ativos</div></div>
+        <div class="metrica camada-viva"><div class="num" id="m-leads">–</div><div class="lbl">Leads recebidos</div></div>
+        <div class="metrica camada-viva"><div class="num" id="m-convertidos">–</div><div class="lbl">Convertidos</div></div>
       </div>
-      <div class="campo-modal"><label>Nome da marca / imobiliária</label><input type="text" id="cad-nome-exibicao" placeholder="Ex: Maria Silva Imóveis"></div>
-      <div class="linha-2">
-        <div class="campo-modal"><label>Seu nome</label><input type="text" id="cad-nome"></div>
-        <div class="campo-modal"><label>CRECI (opcional)</label><input type="text" id="cad-creci"></div>
-      </div>
-      <div class="linha-2">
-        <div class="campo-modal"><label>WhatsApp</label><input type="text" id="cad-whatsapp"></div>
-        <div class="campo-modal"><label>Chave PIX p/ recebimento</label><input type="text" id="cad-pix"></div>
-      </div>
-      <div class="campo-modal"><label>E-mail</label><input type="email" id="cad-email"></div>
-      <div class="campo-modal"><label>Senha</label><input type="password" id="cad-senha"></div>
-      <button class="btn-luxo" style="width:100%" onclick="app.cadastro()">Criar conta</button>
-      <div class="troca-modo">Já tem conta? <a onclick="app.trocarAuth('login')">Entrar</a></div>
+
+      <section class="aba ativa" id="aba-anuncios">
+        <h2 class="aba-titulo">Meus anúncios</h2>
+        <table>
+          <thead><tr><th>Imóvel</th><th>Modalidade</th><th>Preço</th><th>Status</th><th>Ações</th></tr></thead>
+          <tbody id="tabela-anuncios"><tr><td colspan="5" class="vazio">Carregando…</td></tr></tbody>
+        </table>
+      </section>
+
+      <section class="aba" id="aba-leads">
+        <h2 class="aba-titulo">Funil de leads</h2>
+        <div id="lista-leads"><div class="vazio">Carregando…</div></div>
+      </section>
+
+      <section class="aba" id="aba-marca">
+        <h2 class="aba-titulo">Minha marca</h2>
+        <div id="marca-msg" class="msg msg-sucesso oculto"></div>
+        <div class="campo-marca"><label>Nome de exibição</label><input type="text" id="marca-nome"></div>
+        <div class="campo-marca"><label>WhatsApp de contato</label><input type="text" id="marca-whatsapp"></div>
+        <div class="campo-marca"><label>Chave PIX de recebimento</label><input type="text" id="marca-pix"></div>
+        <div class="campo-marca"><label>URL do logo</label><input type="text" id="marca-logo"></div>
+        <div class="campo-marca"><label>Cor primária (hex)</label><input type="text" id="marca-cor" placeholder="#CDA05F"></div>
+        <button class="btn-luxo" onclick="app.salvarMarca()">Salvar alterações</button>
+      </section>
     </div>
-  </div>
-</div>
-
-<!-- ===== Modal: Publicar imóvel ===== -->
-<div class="modal-fundo" id="modal-publicar">
-  <div class="modal camada-viva">
-    <button class="fechar" onclick="app.fecharModal('modal-publicar')">✕</button>
-    <h2>Publicar imóvel</h2>
-    <div id="publicar-erro" class="msg-erro oculto"></div>
-    <div id="publicar-sucesso" class="msg-sucesso oculto"></div>
-
-    <div class="campo-modal"><label>Título</label><input type="text" id="p-titulo" placeholder="Ex: Cobertura 3 quartos — Águas Claras"></div>
-    <div class="campo-modal">
-      <label>Modalidade</label>
-      <select id="p-modalidade" onchange="app.alternarCamposAgio()">
-        <option value="venda_direta">Venda direta</option>
-        <option value="agio">Negociação de Ágio</option>
-        <option value="locacao_residencial">Locação residencial</option>
-      </select>
-    </div>
-    <div class="linha-2">
-      <div class="campo-modal"><label>Preço face (R$)</label><input type="number" id="p-preco"></div>
-      <div class="campo-modal"><label>Localização</label><input type="text" id="p-local"></div>
-    </div>
-
-    <div class="campos-agio oculto" id="campos-agio">
-      <div class="linha-2">
-        <div class="campo-modal"><label>Ágio pago (R$)</label><input type="number" id="p-agio-pago"></div>
-        <div class="campo-modal"><label>Saldo devedor (R$)</label><input type="number" id="p-saldo"></div>
-      </div>
-      <div class="linha-2">
-        <div class="campo-modal"><label>Prestação mensal (R$)</label><input type="number" id="p-prestacao"></div>
-        <div class="campo-modal"><label>Banco credor</label><input type="text" id="p-banco"></div>
-      </div>
-    </div>
-
-    <div class="campo-modal"><label>Memorial descritivo</label><textarea id="p-memorial"></textarea></div>
-    <div class="campo-modal"><label>Link de vídeo (YouTube ou .mp4)</label><input type="text" id="p-video"></div>
-    <div class="campo-modal">
-      <label>Fotos do imóvel</label>
-      <input type="file" id="p-fotos" accept="image/*" multiple onchange="app.enviarFotos(this.files)">
-      <div id="p-fotos-status" style="font-size:.78rem;color:var(--espresso-suave);margin-top:.4rem;"></div>
-    </div>
-
-    <button class="btn-luxo" style="width:100%" onclick="app.publicar()">Publicar anúncio</button>
-  </div>
-</div>
-
-<!-- ===== Modal: Falar com especialista (lead) ===== -->
-<div class="modal-fundo" id="modal-lead">
-  <div class="modal camada-viva">
-    <button class="fechar" onclick="app.fecharModal('modal-lead')">✕</button>
-    <h2>Falar com o anunciante</h2>
-    <div id="lead-sucesso" class="msg-sucesso oculto"></div>
-    <div class="campo-modal"><label>Seu nome</label><input type="text" id="lead-nome"></div>
-    <div class="campo-modal"><label>WhatsApp (com DDD)</label><input type="text" id="lead-whatsapp"></div>
-    <button class="btn-luxo" style="width:100%" onclick="app.enviarLead()">Iniciar conversa</button>
-  </div>
+  </main>
 </div>
 
 <script>
-class ImobiApp {
+class PainelApp {
   constructor() {
-    // Troque pelo endereço do seu Worker depois do `wrangler deploy`
-    // (ex: "https://imobi-api.SEU-USUARIO.workers.dev")
+    // Mesmo endereço configurado no imobi_app.html — troque depois do wrangler deploy.
     this.API_BASE = "https://imobi-api.SEU-USUARIO.workers.dev";
-
-    this.token = localStorage.getItem('imobi_token') || null; // só o token, nunca senha/usuários
-    this.usuario = JSON.parse(localStorage.getItem('imobi_user') || 'null');
-    this.leadAlvo = { tenant_id: null, listing_id: null };
-    this.mediaPendente = [];
-
-    this.atualizarAreaConta();
-    this.carregarListings();
+    this.token = localStorage.getItem('imobi_token');
+    this.tenant = null;
+    if (!this.token) { return; }
+    document.getElementById('login-necessario').classList.add('oculto');
+    document.getElementById('conteudo-painel').classList.remove('oculto');
+    this.carregarTudo();
   }
 
   async chamarApi(caminho, opcoes = {}) {
-    const headers = { 'Content-Type': 'application/json', ...(opcoes.headers || {}) };
-    if (this.token) headers['Authorization'] = 'Bearer ' + this.token;
+    const headers = { 'Content-Type': 'application/json', Authorization: 'Bearer ' + this.token, ...(opcoes.headers || {}) };
     const resp = await fetch(this.API_BASE + caminho, { ...opcoes, headers });
     const dados = await resp.json().catch(() => ({}));
     if (!resp.ok) throw new Error(dados.erro || 'Não foi possível completar a ação.');
     return dados;
   }
 
-  // ---------- Autenticação ----------
-  abrirAuth(modo) { this.trocarAuth(modo); this.abrirModal('modal-auth'); }
-  trocarAuth(modo) {
-    document.getElementById('bloco-login').classList.toggle('oculto', modo !== 'login');
-    document.getElementById('bloco-cadastro').classList.toggle('oculto', modo !== 'cadastro');
-    document.getElementById('auth-erro').classList.add('oculto');
+  trocarAba(nome) {
+    document.querySelectorAll('.aba').forEach(a => a.classList.remove('ativa'));
+    document.getElementById('aba-' + nome).classList.add('ativa');
+    document.querySelectorAll('.lateral .item').forEach(b => b.classList.remove('ativo'));
+    document.querySelector(`.lateral .item[data-aba="${nome}"]`).classList.add('ativo');
   }
 
-  async login() {
-    const email = document.getElementById('login-email').value.trim();
-    const senha = document.getElementById('login-senha').value;
+  async carregarTudo() {
     try {
-      const dados = await this.chamarApi('/api/auth/login', { method: 'POST', body: JSON.stringify({ email, senha }) });
-      this.definirSessao(dados.token, dados.user, dados.tenant);
-      this.fecharModal('modal-auth');
-    } catch (e) { this.mostrarErro('auth-erro', e.message); }
+      const me = await this.chamarApi('/api/auth/me');
+      this.tenant = me.tenant;
+      this.preencherStatusLicenca();
+      this.preencherFormMarca();
+    } catch (e) { this.mostrarLoginNecessario(); return; }
+    this.carregarAnuncios();
+    this.carregarLeads();
   }
 
-  async cadastro() {
+  mostrarLoginNecessario() {
+    localStorage.removeItem('imobi_token');
+    document.getElementById('login-necessario').classList.remove('oculto');
+    document.getElementById('conteudo-painel').classList.add('oculto');
+  }
+
+  preencherStatusLicenca() {
+    const t = this.tenant;
+    const el = document.getElementById('status-licenca');
+    const rotuloStatus = { trial: 'Período de teste', ativo: 'Ativa', suspenso: 'Suspensa', cancelado: 'Cancelada' };
+    el.innerHTML = `<strong>${rotuloStatus[t.status_licenca] || t.status_licenca}</strong>
+      Plano ${t.plano} · ${t.anuncios_publicados}/${t.limite_anuncios === 999999 ? '∞' : t.limite_anuncios} anúncios`;
+  }
+
+  preencherFormMarca() {
+    document.getElementById('marca-nome').value = this.tenant.nome_exibicao || '';
+    document.getElementById('marca-whatsapp').value = this.tenant.whatsapp_contato || '';
+    document.getElementById('marca-pix').value = this.tenant.chave_pix || '';
+    document.getElementById('marca-logo').value = this.tenant.logo_url || '';
+    document.getElementById('marca-cor').value = this.tenant.cor_primaria || '';
+  }
+
+  async salvarMarca() {
     const corpo = {
-      tipo_perfil: document.getElementById('cad-tipo').value,
-      nome_exibicao: document.getElementById('cad-nome-exibicao').value.trim(),
-      nome: document.getElementById('cad-nome').value.trim(),
-      creci: document.getElementById('cad-creci').value.trim(),
-      whatsapp: document.getElementById('cad-whatsapp').value.trim(),
-      chave_pix: document.getElementById('cad-pix').value.trim(),
-      email: document.getElementById('cad-email').value.trim(),
-      senha: document.getElementById('cad-senha').value,
+      nome_exibicao: document.getElementById('marca-nome').value.trim(),
+      whatsapp_contato: document.getElementById('marca-whatsapp').value.trim(),
+      chave_pix: document.getElementById('marca-pix').value.trim(),
+      logo_url: document.getElementById('marca-logo').value.trim(),
+      cor_primaria: document.getElementById('marca-cor').value.trim(),
     };
     try {
-      const dados = await this.chamarApi('/api/auth/cadastro', { method: 'POST', body: JSON.stringify(corpo) });
-      this.definirSessao(dados.token, { nome: corpo.nome, email: corpo.email }, dados.tenant);
-      this.fecharModal('modal-auth');
-    } catch (e) { this.mostrarErro('auth-erro', e.message); }
-  }
-
-  definirSessao(token, user, tenant) {
-    this.token = token; this.usuario = { ...user, tenant };
-    localStorage.setItem('imobi_token', token);
-    localStorage.setItem('imobi_user', JSON.stringify(this.usuario));
-    this.atualizarAreaConta();
-  }
-
-  logout() {
-    this.token = null; this.usuario = null;
-    localStorage.removeItem('imobi_token'); localStorage.removeItem('imobi_user');
-    this.atualizarAreaConta();
-  }
-
-  atualizarAreaConta() {
-    const logado = !!this.token;
-    document.getElementById('area-visitante').classList.toggle('oculto', logado);
-    document.getElementById('area-logado').classList.toggle('oculto', !logado);
-    if (logado) document.getElementById('nome-usuario-logado').innerText = this.usuario?.tenant?.nome_exibicao || this.usuario?.nome || '';
-  }
-
-  // ---------- Vitrine ----------
-  filtrar(modalidade) { document.getElementById('busca-modalidade').value = modalidade; this.carregarListings(); }
-
-  async carregarListings() {
-    const grade = document.getElementById('grade-imoveis');
-    const modalidade = document.getElementById('busca-modalidade').value;
-    const q = document.getElementById('busca-q').value.trim();
-    grade.innerHTML = '<div class="estado-vazio"><strong>Buscando…</strong>Consultando os imóveis publicados pela rede.</div>';
-    try {
-      const params = new URLSearchParams({ modalidade, ...(q ? { q } : {}) });
-      const dados = await this.chamarApi('/api/listings?' + params.toString());
-      this.renderizarListings(dados.listings || []);
-    } catch (e) {
-      grade.innerHTML = `<div class="estado-vazio"><strong>Não foi possível carregar a vitrine.</strong>Verifique se o backend foi implantado (wrangler deploy) e se o endereço em API_BASE está correto. Detalhe: ${e.message}</div>`;
-    }
-  }
-
-  renderizarListings(listings) {
-    const grade = document.getElementById('grade-imoveis');
-    document.getElementById('contador-resultados').innerText = listings.length ? `${listings.length} imóveis encontrados` : '';
-    if (!listings.length) {
-      grade.innerHTML = '<div class="estado-vazio"><strong>Nenhum imóvel aqui ainda.</strong>Ajuste os filtros ou seja o primeiro a publicar nesta modalidade.</div>';
-      return;
-    }
-    const rotulos = { agio: 'Ágio', venda_direta: 'Venda direta', locacao_residencial: 'Locação' };
-    grade.innerHTML = listings.map(l => {
-      const foto = (l.media && l.media.find(m => m.tipo === 'foto'))?.url;
-      const estiloFoto = foto ? `style="background-image:url('${foto}')"` : '';
-      return `
-        <article class="card camada-viva" onclick='app.abrirLead(${JSON.stringify({ tenant_id: l.tenant_id, listing_id: l.id })})'>
-          <div class="card-foto" ${estiloFoto}><span class="card-tag">${rotulos[l.modalidade] || l.modalidade}</span></div>
-          <div class="card-corpo">
-            <h3>${this.escapar(l.titulo)}</h3>
-            <div class="card-local">${this.escapar(l.localizacao || '')}</div>
-            <div class="card-rodape">
-              <div class="card-preco">R$ ${Number(l.preco_face).toLocaleString('pt-BR')}</div>
-              <div class="card-anunciante">${this.escapar(l.tenant_nome || '')}</div>
-            </div>
-          </div>
-        </article>`;
-    }).join('');
-  }
-
-  escapar(texto) { const d = document.createElement('div'); d.innerText = texto || ''; return d.innerHTML; }
-
-  // ---------- Publicar imóvel ----------
-  abrirPublicar() { this.abrirModal('modal-publicar'); }
-  alternarCamposAgio() {
-    document.getElementById('campos-agio').classList.toggle('oculto', document.getElementById('p-modalidade').value !== 'agio');
-  }
-
-  async enviarFotos(arquivos) {
-    const status = document.getElementById('p-fotos-status');
-    status.innerText = 'Enviando fotos...';
-    try {
-      for (const arquivo of arquivos) {
-        const form = new FormData(); form.append('file', arquivo);
-        const resp = await fetch(this.API_BASE + '/api/media/upload', { method: 'POST', headers: { Authorization: 'Bearer ' + this.token }, body: form });
-        const dados = await resp.json();
-        if (!resp.ok) throw new Error(dados.erro);
-        this.mediaPendente.push({ tipo: dados.tipo, url: dados.url });
-      }
-      status.innerText = `${this.mediaPendente.length} arquivo(s) prontos para publicar.`;
-    } catch (e) { status.innerText = 'Falha no envio: ' + e.message; }
-  }
-
-  async publicar() {
-    if (!this.token) { this.abrirAuth('login'); return; }
-    const corpo = {
-      titulo: document.getElementById('p-titulo').value.trim(),
-      modalidade: document.getElementById('p-modalidade').value,
-      preco_face: Number(document.getElementById('p-preco').value || 0),
-      localizacao: document.getElementById('p-local').value.trim(),
-      agio_pago: Number(document.getElementById('p-agio-pago').value || 0) || null,
-      saldo_devedor: Number(document.getElementById('p-saldo').value || 0) || null,
-      prestacao_mensal: Number(document.getElementById('p-prestacao').value || 0) || null,
-      banco_credor: document.getElementById('p-banco').value.trim() || null,
-      memorial_descritivo: document.getElementById('p-memorial').value.trim(),
-      video_tour_url: document.getElementById('p-video').value.trim(),
-      media_urls: this.mediaPendente,
-    };
-    try {
-      await this.chamarApi('/api/listings', { method: 'POST', body: JSON.stringify(corpo) });
-      document.getElementById('publicar-sucesso').innerText = 'Anúncio publicado! Já está visível na vitrine pública.';
-      document.getElementById('publicar-sucesso').classList.remove('oculto');
-      this.mediaPendente = [];
-      this.carregarListings();
-      setTimeout(() => this.fecharModal('modal-publicar'), 1400);
-    } catch (e) { this.mostrarErro('publicar-erro', e.message); }
-  }
-
-  // ---------- Leads ----------
-  abrirLead({ tenant_id, listing_id }) { this.leadAlvo = { tenant_id, listing_id }; this.abrirModal('modal-lead'); }
-  async enviarLead() {
-    const corpo = {
-      ...this.leadAlvo,
-      nome: document.getElementById('lead-nome').value.trim(),
-      whatsapp: document.getElementById('lead-whatsapp').value.trim(),
-    };
-    try {
-      await this.chamarApi('/api/leads', { method: 'POST', body: JSON.stringify(corpo) });
-      const el = document.getElementById('lead-sucesso');
-      el.innerText = 'Recebemos seu contato. O anunciante vai falar com você em breve.';
-      el.classList.remove('oculto');
+      await this.chamarApi('/api/tenant/me', { method: 'PATCH', body: JSON.stringify(corpo) });
+      const el = document.getElementById('marca-msg');
+      el.innerText = 'Marca atualizada com sucesso.'; el.classList.remove('oculto');
     } catch (e) { alert(e.message); }
   }
 
-  // ---------- Utilitários de modal ----------
-  abrirModal(id) { document.getElementById(id).classList.add('ativo'); }
-  fecharModal(id) { document.getElementById(id).classList.remove('ativo'); document.getElementById(id).querySelectorAll('.msg-erro,.msg-sucesso').forEach(e => e.classList.add('oculto')); }
-  mostrarErro(id, msg) { const el = document.getElementById(id); el.innerText = msg; el.classList.remove('oculto'); }
+  async carregarAnuncios() {
+    const tbody = document.getElementById('tabela-anuncios');
+    try {
+      const { listings } = await this.chamarApi('/api/listings/mine');
+      document.getElementById('m-anuncios').innerText = listings.filter(l => l.status === 'ativo').length;
+      if (!listings.length) { tbody.innerHTML = '<tr><td colspan="5" class="vazio">Você ainda não publicou nenhum imóvel.</td></tr>'; return; }
+      const rotulos = { agio: 'Ágio', venda_direta: 'Venda direta', locacao_residencial: 'Locação' };
+      tbody.innerHTML = listings.map(l => `
+        <tr>
+          <td>${this.escapar(l.titulo)}</td>
+          <td>${rotulos[l.modalidade] || l.modalidade}</td>
+          <td>R$ ${Number(l.preco_face).toLocaleString('pt-BR')}</td>
+          <td><span class="tag ${l.status === 'vendido' ? 'tag-vendido' : 'tag-ativo'}">${l.status}</span></td>
+          <td>
+            ${l.status === 'ativo' ? `<button class="acao-link" onclick="app.marcarVendido('${l.id}')">Marcar vendido</button>` : ''}
+            <button class="acao-link" onclick="app.excluirAnuncio('${l.id}')">Excluir</button>
+          </td>
+        </tr>`).join('');
+    } catch (e) { tbody.innerHTML = `<tr><td colspan="5" class="vazio">${e.message}</td></tr>`; }
+  }
+
+  async marcarVendido(id) {
+    try { await this.chamarApi(`/api/listings/${id}`, { method: 'PATCH', body: JSON.stringify({ status: 'vendido' }) }); this.carregarAnuncios(); }
+    catch (e) { alert(e.message); }
+  }
+  async excluirAnuncio(id) {
+    if (!confirm('Remover este anúncio da vitrine?')) return;
+    try { await this.chamarApi(`/api/listings/${id}`, { method: 'DELETE' }); this.carregarAnuncios(); }
+    catch (e) { alert(e.message); }
+  }
+
+  async carregarLeads() {
+    const cont = document.getElementById('lista-leads');
+    try {
+      const { leads } = await this.chamarApi('/api/leads/mine');
+      document.getElementById('m-leads').innerText = leads.length;
+      document.getElementById('m-convertidos').innerText = leads.filter(l => l.status === 'convertido').length;
+      if (!leads.length) { cont.innerHTML = '<div class="vazio">Nenhum lead recebido ainda.</div>'; return; }
+      cont.innerHTML = leads.map(l => `
+        <div class="lead-card camada-viva">
+          <div class="lead-topo">
+            <span class="lead-nome">${this.escapar(l.nome)}</span>
+            <a class="lead-whats" href="https://wa.me/${l.whatsapp.replace(/\D/g,'')}" target="_blank">WhatsApp</a>
+          </div>
+          <div class="lead-acoes">
+            <select onchange="app.atualizarStatusLead('${l.id}', this.value)">
+              ${['novo','contatado','agendado','convertido','perdido'].map(s => `<option value="${s}" ${s===l.status?'selected':''}>${s}</option>`).join('')}
+            </select>
+          </div>
+        </div>`).join('');
+    } catch (e) { cont.innerHTML = `<div class="vazio">${e.message}</div>`; }
+  }
+
+  async atualizarStatusLead(id, status) {
+    try { await this.chamarApi(`/api/leads/${id}`, { method: 'PATCH', body: JSON.stringify({ status }) }); this.carregarLeads(); }
+    catch (e) { alert(e.message); }
+  }
+
+  escapar(texto) { const d = document.createElement('div'); d.innerText = texto || ''; return d.innerHTML; }
 }
 
-const app = new ImobiApp();
+const app = new PainelApp();
 </script>
 </body>
 </html>
