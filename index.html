@@ -264,8 +264,8 @@
 class ImobiApp {
   constructor() {
     // Troque pelo endereço do seu Worker depois do `wrangler deploy`
-    // (ex: "https://imobi-api.SEU-USUARIO.workers.dev")
-    this.API_BASE = "https://imobi-api.SEU-USUARIO.workers.dev";
+    // (ex: "https://imobi-api.contatodroppfy.workers.dev")
+    this.API_BASE = "https://imobi-api.contatodroppfy.workers.dev";
 
     this.token = localStorage.getItem('imobi_token') || null; // só o token, nunca senha/usuários
     this.usuario = JSON.parse(localStorage.getItem('imobi_user') || 'null');
