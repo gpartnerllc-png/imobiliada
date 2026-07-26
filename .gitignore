@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.env
+.env.local
+wrangler.toml.bak
+.d1-store/
+.dev.vars
+*.log
+.DS_Store

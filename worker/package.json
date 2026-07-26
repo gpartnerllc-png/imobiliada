@@ -1,0 +1,23 @@
+{
+  "name": "imobi-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "tail": "wrangler tail",
+    "db:create": "wrangler d1 create imobi-db",
+    "db:migrate:local": "wrangler d1 migrations apply imobi-db --local",
+    "db:migrate:prod": "wrangler d1 migrations apply imobi-db --remote"
+  },
+  "dependencies": {
+    "hono": "^4.5.0",
+    "@tsndr/cloudflare-worker-jwt": "^3.1.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240718.0",
+    "typescript": "^5.5.0",
+    "wrangler": "^3.65.0"
+  }
+}
