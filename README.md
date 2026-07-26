@@ -24,7 +24,7 @@ Site e API da IMOBI: uma vitrine única para corretores, imobiliárias, construt
 - **Backend:** Cloudflare Worker + Hono (TypeScript)
 - **Banco:** Cloudflare D1
 - **Armazenamento de mídia:** Cloudflare R2
-- **Deploy:** GitHub Actions → Cloudflare Workers / Pages
+- **Deploy:** GitHub Actions → Cloudflare Workers; frontend via GitHub Pages
 
 ## Como rodar localmente
 
@@ -53,7 +53,7 @@ npm run dev
 
 1. **Obtenha suas credenciais da Cloudflare:**
    - Account ID
-   - API Token com permissões para Workers, D1, R2 e Pages
+   - API Token com permissões para Workers, D1 e R2
 
 2. **Configure o `worker/wrangler.toml`:**
    - `account_id`
@@ -83,12 +83,14 @@ wrangler secret put JWT_SECRET
    - `CLOUDFLARE_API_TOKEN`
    - `CLOUDFLARE_ACCOUNT_ID`
 
-5. **Deploy manual (ou push na `main` para ativar CI/CD):**
+5. **Deploy manual do Worker (ou push na `main` para ativar CI/CD):**
 
 ```bash
 cd worker
 npm run deploy
 ```
+
+6. **Frontend:** o site é publicado automaticamente pelo GitHub Pages a cada push na `main`. O domínio `imobi.droppfy.com` deve apontar para os servidores do GitHub Pages.
 
 ## Rotas da API
 
