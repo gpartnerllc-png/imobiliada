@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import { jwtVerify, sign } from '@tsndr/cloudflare-worker-jwt';
+import { verify, sign } from '@tsndr/cloudflare-worker-jwt';
 
 // Tipos das bindings do wrangler.toml
 interface Env {
@@ -8,7 +8,17 @@ interface Env {
   JWT_SECRET: string;
 }
 
-const app = new Hono<{ Bindings: Env }>();
+interface UserJwt {
+  sub: string;
+  tenant_id: number;
+  email: string;
+}
+
+type Variables = {
+  user: UserJwt;
+};
+
+const app = new Hono<{ Bindings: Env; Variables: Variables }>();
 
 // ===== Helpers =====
 const respostaErro = (c: any, status: number, mensagem: string) =>
@@ -36,9 +46,9 @@ async function authMiddleware(c: any, next: any) {
   const token = header.replace(/^Bearer\s+/i, '');
   if (!token) return respostaErro(c, 401, 'Token ausente.');
   try {
-    const ok = await jwtVerify(token, c.env.JWT_SECRET);
+    const ok = await verify(token, c.env.JWT_SECRET);
     if (!ok) throw new Error('invalid');
-    const payload = JSON.parse(atob(token.split('.')[1]));
+    const payload = JSON.parse(atob(token.split('.')[1])) as UserJwt;
     c.set('user', payload);
     await next();
   } catch {
@@ -52,7 +62,7 @@ app.use('*', async (c, next) => {
   c.header('Access-Control-Allow-Origin', origin);
   c.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   c.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  if (c.req.method === 'OPTIONS') return c.text('', 204);
+  if (c.req.method === 'OPTIONS') return new Response(null, { status: 204 });
   await next();
 });
 
