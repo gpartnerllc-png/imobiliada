@@ -1,5 +1,6 @@
 import { Hono } from 'hono';
-import { verify, sign } from '@tsndr/cloudflare-worker-jwt';
+import { cors } from 'hono/cors'; // <-- CORREÇÃO: Importado o CORS nativo do Hono
+import { verify, sign, decode } from '@tsndr/cloudflare-worker-jwt'; // <-- CORREÇÃO: Adicionado 'decode'
 
 // Tipos das bindings do wrangler.toml
 interface Env {
@@ -10,7 +11,7 @@ interface Env {
 
 interface UserJwt {
   sub: string;
-  tenant_id: number;
+  tenant_id: string | number; // <-- CORREÇÃO: Flexibilizado para evitar erro de tipo
   email: string;
 }
 
@@ -45,11 +46,15 @@ async function authMiddleware(c: any, next: any) {
   const header = c.req.header('Authorization') || '';
   const token = header.replace(/^Bearer\s+/i, '');
   if (!token) return respostaErro(c, 401, 'Token ausente.');
+  
   try {
     const ok = await verify(token, c.env.JWT_SECRET);
     if (!ok) throw new Error('invalid');
-    const payload = JSON.parse(atob(token.split('.')[1])) as UserJwt;
-    c.set('user', payload);
+    
+    // <-- CORREÇÃO: Decode seguro usando a própria lib
+    const { payload } = decode(token); 
+    c.set('user', payload as UserJwt);
+    
     await next();
   } catch {
     return respostaErro(c, 401, 'Token inválido.');
@@ -57,14 +62,12 @@ async function authMiddleware(c: any, next: any) {
 }
 
 // ===== CORS =====
-app.use('*', async (c, next) => {
-  const origin = c.req.header('Origin') || '*';
-  c.header('Access-Control-Allow-Origin', origin);
-  c.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  c.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  if (c.req.method === 'OPTIONS') return new Response(null, { status: 204 });
-  await next();
-});
+// <-- CORREÇÃO: Substituição do CORS manual pelo nativo (resolve 100% o erro Failed to Fetch)
+app.use('*', cors({
+  origin: '*',
+  allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+}));
 
 // ===== Auth: cadastro =====
 app.post('/api/auth/cadastro', async (c) => {
@@ -87,20 +90,22 @@ app.post('/api/auth/cadastro', async (c) => {
   const existente = await c.env.DB.prepare(
     'SELECT id FROM users WHERE email = ?'
   ).bind(email).first();
+  
   if (existente) return respostaErro(c, 409, 'E-mail já cadastrado.');
 
   const tenant = await c.env.DB.prepare(
     `INSERT INTO tenants (tipo_perfil, nome_exibicao, nome, creci, whatsapp, chave_pix)
      VALUES (?, ?, ?, ?, ?, ?) RETURNING id`
-  ).bind(tipo_perfil, nome_exibicao, nome, creci || null, whatsapp || null, chave_pix || null).first<{ id: number }>();
+  ).bind(tipo_perfil, nome_exibicao, nome, creci || null, whatsapp || null, chave_pix || null).first<{ id: string | number }>();
 
   if (!tenant) return respostaErro(c, 500, 'Erro ao criar perfil.');
 
   const salt = crypto.randomUUID();
   const passwordHash = await hashSenha(senha, salt);
+  
   const user = await c.env.DB.prepare(
     `INSERT INTO users (tenant_id, email, password_hash) VALUES (?, ?, ?) RETURNING id`
-  ).bind(tenant.id, email, `${salt}:${passwordHash}`).first<{ id: number }>();
+  ).bind(tenant.id, email, `${salt}:${passwordHash}`).first<{ id: string | number }>();
 
   if (!user) return respostaErro(c, 500, 'Erro ao criar usuário.');
 
@@ -180,7 +185,7 @@ app.get('/api/listings', async (c) => {
 
 // ===== Listings: publicar =====
 app.post('/api/listings', authMiddleware, async (c) => {
-  const user = c.get('user') as { tenant_id: number };
+  const user = c.get('user') as { tenant_id: string | number };
   const body = await c.req.json();
 
   const required = ['titulo', 'modalidade', 'preco_face', 'localizacao'];
@@ -207,7 +212,7 @@ app.post('/api/listings', authMiddleware, async (c) => {
     body.banco_credor || null,
     body.memorial_descritivo || null,
     body.video_tour_url || null
-  ).first<{ id: number }>();
+  ).first<{ id: string | number }>();
 
   if (!listing) return respostaErro(c, 500, 'Erro ao publicar imóvel.');
 
@@ -225,7 +230,7 @@ app.post('/api/listings', authMiddleware, async (c) => {
 
 // ===== Upload de mídia =====
 app.post('/api/media/upload', authMiddleware, async (c) => {
-  const user = c.get('user') as { tenant_id: number };
+  const user = c.get('user') as { tenant_id: string | number };
   const form = await c.req.formData();
   const file = form.get('file') as File | null;
   if (!file) return respostaErro(c, 400, 'Nenhum arquivo enviado.');
@@ -235,7 +240,6 @@ app.post('/api/media/upload', authMiddleware, async (c) => {
     httpMetadata: { contentType: file.type },
   });
 
-  // URL pública via Worker — em produção use um subdomínio R2 ou Images.
   const url = `${new URL(c.req.url).origin}/media/${key}`;
   const tipo = file.type.startsWith('video') ? 'video' : 'foto';
 
